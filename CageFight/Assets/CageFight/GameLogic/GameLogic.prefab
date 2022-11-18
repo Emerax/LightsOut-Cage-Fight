@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7763378283745237418}
   - component: {fileID: 5677848930866840129}
+  - component: {fileID: 2905736544290226142}
   m_Layer: 0
   m_Name: GameLogic
   m_TagString: Untagged
@@ -54,3 +55,19 @@ MonoBehaviour:
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
+--- !u!114 &2905736544290226142
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7699404646686268458}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 115c45168bba4aa40ba1566a66ec6cc0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameplaySceneUI: {fileID: 7699404646686268458}
+  androidVotingUI: 
+  iphoneVotingUI: 
+  webVotingUI: 

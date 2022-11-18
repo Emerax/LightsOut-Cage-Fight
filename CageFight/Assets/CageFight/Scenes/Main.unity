@@ -131,6 +131,10 @@ PrefabInstance:
     serializedVersion: 2
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 5677848930866840129, guid: e9006f5a957f9564da2862561b948475, type: 3}
+      propertyPath: sceneViewId
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7699404646686268458, guid: e9006f5a957f9564da2862561b948475, type: 3}
       propertyPath: m_Name
       value: GameLogic
