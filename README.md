@@ -1,2 +1,5 @@
 # LightsOut
 Sus
+
+Contributors:
+Jojoje
