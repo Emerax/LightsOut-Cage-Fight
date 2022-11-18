@@ -67,7 +67,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 115c45168bba4aa40ba1566a66ec6cc0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameplaySceneUI: {fileID: 7699404646686268458}
+  gameplaySceneUI: {fileID: 4510797833359447117, guid: a09f5a9aee4191546a743f36bd666fb3, type: 3}
   androidVotingUI: 
   iphoneVotingUI: 
   webVotingUI: 
