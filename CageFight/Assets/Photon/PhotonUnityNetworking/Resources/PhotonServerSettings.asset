@@ -41,6 +41,7 @@ MonoBehaviour:
   - ChangeState
   - AssignSegmentRPC
   - DeassignSegmentRPC
+  - ReceiveDamageRPC
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
