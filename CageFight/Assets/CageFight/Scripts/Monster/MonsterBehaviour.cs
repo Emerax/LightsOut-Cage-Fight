@@ -5,6 +5,9 @@ public class MonsterBehaviour : MonoBehaviourPun, IPunInstantiateMagicCallback, 
 
     public MonsterData Data { get; private set; }
 
+    [SerializeField]
+    private GameObject visuals;
+
     private IMonsterController monsterController;
 
     private bool isFirstNetworkRead = true;
@@ -14,6 +17,11 @@ public class MonsterBehaviour : MonoBehaviourPun, IPunInstantiateMagicCallback, 
         Data = MonsterData.FromObjectArray(info.photonView.InstantiationData);
         Debug.Log($"Instantiated Monster on team {Data.Team}");
         MonsterList.Instance.AddMonster(this);
+
+        visuals.transform.localScale = new Vector3(Data.Width, Data.Height, Data.Width);
+        Vector3 position = visuals.transform.localPosition;
+        position.y = 0.5f * Data.Height;
+        visuals.transform.localPosition = position;
     }
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) {

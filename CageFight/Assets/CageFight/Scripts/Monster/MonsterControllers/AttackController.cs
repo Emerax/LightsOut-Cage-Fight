@@ -1,33 +1,24 @@
 using System;
 using UnityEngine;
 
-public class MeleeController : IMonsterController {
+public class AttackController : IMonsterController {
 
     public MonsterData Data => monsterData;
 
     private readonly ArenaData arenaData;
     private readonly MonsterData monsterData;
-
-    private readonly float movementSpeed;
-    private readonly float attackRange;
-    private readonly float attackCooldown;
-    private readonly float attackDamage;
+    private readonly AttackVariant stats;
 
     private float attackCooldownLeft;
     private bool isDead;
 
     public Action<IMonsterController> OnDeath { get; set; }
 
-    public MeleeController(ArenaData arenaData, MonsterData monsterData,
-        float movementSpeed, float attackRange, float attackCooldown, float attackDamage) {
+    public AttackController(ArenaData arenaData, MonsterData monsterData, AttackVariant stats) {
 
         this.arenaData = arenaData;
         this.monsterData = monsterData;
-
-        this.movementSpeed = movementSpeed;
-        this.attackRange = attackRange;
-        this.attackCooldown = attackCooldown;
-        this.attackDamage = attackDamage;
+        this.stats = stats;
 
         attackCooldownLeft = 0f;
         isDead = false;
@@ -50,23 +41,27 @@ public class MeleeController : IMonsterController {
             }
         }
 
-        Vector2 toTarget;
-        if(closestEnemyDistance < 5f) {
-            toTarget = closestEnemy.Data.position - monsterData.position;
-        }
-        else {
-            toTarget = arenaData.centerPosition - monsterData.position;
-        }
-        monsterData.position += deltaTime * movementSpeed * toTarget.normalized;
+        bool isCooldownLeft = attackCooldownLeft > 0;
 
-        if(attackCooldownLeft <= 0) {
-            if(closestEnemyDistance < attackRange) {
-                closestEnemy.ReceiveDamage(attackDamage);
-                attackCooldownLeft = attackCooldown;
-                Debug.Log($"{nameof(MeleeController)} on team {monsterData.Team} attacked monster on team {closestEnemy.Data.Team} from {closestEnemyDistance} m away.");
+        if(closestEnemyDistance < stats.attackRange) {
+            if(!isCooldownLeft) {
+                closestEnemy.ReceiveDamage(stats.attackDamage);
+                attackCooldownLeft = stats.attackCooldown;
+                Debug.Log($"{Data.ID} monster on team {monsterData.Team} attacked {closestEnemy.Data.ID} monster on team {closestEnemy.Data.Team} from {closestEnemyDistance} m away.");
             }
         }
         else {
+            Vector2 toTarget;
+            if(closestEnemyDistance < 5f) {
+                toTarget = closestEnemy.Data.position - monsterData.position;
+            }
+            else {
+                toTarget = arenaData.centerPosition - monsterData.position;
+            }
+            monsterData.position += deltaTime * stats.movementSpeed * toTarget.normalized;
+        }
+
+        if(isCooldownLeft) {
             attackCooldownLeft -= deltaTime;
         }
     }

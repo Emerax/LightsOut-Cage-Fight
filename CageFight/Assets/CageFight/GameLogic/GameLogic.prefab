@@ -81,3 +81,4 @@ MonoBehaviour:
   - {r: 1, g: 0, b: 0.9437647, a: 1}
   - {r: 0.6173992, g: 0, b: 1, a: 1}
   startingMoney: 100
+  monsterSettings: {fileID: 11400000, guid: 0744444c0727e1f4f8da65ddc79c78f6, type: 2}

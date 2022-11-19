@@ -2,6 +2,7 @@ using ExitGames.Client.Photon;
 using Photon.Pun;
 using Photon.Realtime;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 /// <summary>
@@ -20,6 +21,8 @@ public class GameLogic : MonoBehaviourPunCallbacks {
     private List<Color> playerColors;
     [SerializeField]
     private int startingMoney;
+    [SerializeField]
+    private MonsterSettings monsterSettings;
     public GladiatorManager LocalPlayer { get; private set; }
 
     //Player property keys
@@ -38,7 +41,8 @@ public class GameLogic : MonoBehaviourPunCallbacks {
         PRE_PHASE = 0,
         COMBAT_PHASE = 1,
         SHOP_PHASE = 2,
-        END_PHASE = 3
+        END_PHASE = 3,
+        DEBUG_COMBAT_PHASE = 99,
     }
 
     private GameState state = GameState.PRE_PHASE;
@@ -64,6 +68,7 @@ public class GameLogic : MonoBehaviourPunCallbacks {
         switch(state) {
             case GameState.PRE_PHASE:
                 break;
+            case GameState.DEBUG_COMBAT_PHASE:
             case GameState.COMBAT_PHASE:
                 monsterManager.Tick(Time.deltaTime);
                 break;
@@ -77,6 +82,15 @@ public class GameLogic : MonoBehaviourPunCallbacks {
     }
 
     private void UpdateInput() {
+        if(Input.GetKeyDown(KeyCode.P)) {
+            if(state == GameState.DEBUG_COMBAT_PHASE) {
+                photonView.RPC(nameof(DebugSpawnMonstersRPC), RpcTarget.All);
+            }
+            else {
+                ChangeState(GameState.DEBUG_COMBAT_PHASE);
+            }
+        }
+
         switch(state) {
             case GameState.PRE_PHASE:
                 if(Input.GetKeyDown(KeyCode.Return)) {
@@ -234,8 +248,26 @@ public class GameLogic : MonoBehaviourPunCallbacks {
                 break;
             case GameState.END_PHASE:
                 break;
+            case GameState.DEBUG_COMBAT_PHASE:
+                DebugSpawnMonsters();
+                break;
             default:
                 break;
         }
+    }
+
+    private void DebugSpawnMonsters() {
+        ArenaData arenaData = new(Vector2.zero);
+        int team = PhotonNetwork.LocalPlayer.ActorNumber;
+        float angle = team * 0.25f * Mathf.PI;
+        Vector2 axis = new(Mathf.Cos(angle), Mathf.Sin(angle));
+
+        monsterManager.SpawnMonster(IMonsterController.Create(monsterSettings, MonsterVariantID.Melee, arenaData, 10f * axis));
+        monsterManager.SpawnMonster(IMonsterController.Create(monsterSettings, MonsterVariantID.Ranged, arenaData, -10f * axis));
+    }
+
+    [PunRPC]
+    private void DebugSpawnMonstersRPC() {
+        DebugSpawnMonsters();
     }
 }
