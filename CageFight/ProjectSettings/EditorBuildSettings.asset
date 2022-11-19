@@ -4,5 +4,8 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/CageFight/Scenes/Main.unity
+    guid: 56e28c77a88f3624f92903d2738cc983
   m_configObjects: {}

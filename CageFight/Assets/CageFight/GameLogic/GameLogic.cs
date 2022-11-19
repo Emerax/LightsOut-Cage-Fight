@@ -16,6 +16,7 @@ public class GameLogic : MonoBehaviourPunCallbacks {
     [SerializeField]
     private string webVotingUI;
     private List<GladiatorManager> players = new();
+    private MonsterManager monsterManager;
 
     private void Awake() {
 #if UNITY_ANDROID || UNITY_IOS || UNITY_WEBGL
@@ -27,10 +28,15 @@ public class GameLogic : MonoBehaviourPunCallbacks {
 #endif
     }
 
+    private void Start() {
+        monsterManager = new MonsterManager();
+    }
+
     private void Update() {
         if(Input.GetKeyDown(KeyCode.Return)) {
             photonView.RPC(nameof(SayHiRPC), RpcTarget.All);
         }
+        monsterManager.Tick(Time.deltaTime);
     }
 
     public override void OnConnectedToMaster() {
@@ -38,15 +44,18 @@ public class GameLogic : MonoBehaviourPunCallbacks {
     }
 
     public override void OnJoinedRoom() {
+        Debug.Log($"Joined the room as player {PhotonNetwork.LocalPlayer}");
         if(PhotonNetwork.IsMasterClient) {
             //First time setup goes here! This player should decide when the game starts.
         }
         else {
             //Yer a pleb!
         }
+        monsterManager.SpawnMonster();
     }
 
     public override void OnPlayerEnteredRoom(Player newPlayer) {
+        Debug.Log($"Player {newPlayer} entered the room");
         //Add to player list.
     }
 
