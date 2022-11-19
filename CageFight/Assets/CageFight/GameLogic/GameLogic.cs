@@ -30,6 +30,7 @@ public class GameLogic : MonoBehaviourPunCallbacks {
     private MonsterManager monsterManager;
     private UI ui;
     private Arena arena;
+    private CameraController cameraController;
     private int nextPlayerColorIndex = 0;
     private List<Player> players;
 
@@ -44,6 +45,7 @@ public class GameLogic : MonoBehaviourPunCallbacks {
 
     private void Awake() {
         arena = FindObjectOfType<Arena>();
+        cameraController = FindObjectOfType<CameraController>();
 #if UNITY_ANDROID || UNITY_IOS || UNITY_WEBGL
         //These clients should never be master.
         //Try to join room, else... coroutine for 5 seconds and retry?
@@ -128,7 +130,11 @@ public class GameLogic : MonoBehaviourPunCallbacks {
 
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps) {
         switch(state) {
+            case GameState.PRE_PHASE:
+                //Read READY here to update UI with number of ready players. Display in UI?
+                break;
             case GameState.SHOP_PHASE:
+                Debug.Log($"State is now {state}");
                 if(changedProps.TryGetValue(READY_KEY, out object _)) {
                     if(AllPlayersAreReady()) {
                         ChangeState(GameState.COMBAT_PHASE);
@@ -203,6 +209,7 @@ public class GameLogic : MonoBehaviourPunCallbacks {
                 break;
             case GameState.SHOP_PHASE:
                 //Hide away shops, re-spawn monsters.
+                cameraController.SetArenaTarget();
                 break;
             case GameState.END_PHASE:
                 //Reset everything for a new game?
@@ -222,6 +229,8 @@ public class GameLogic : MonoBehaviourPunCallbacks {
                 if(PhotonNetwork.IsMasterClient) {
                     arena.AssignSegmentsToPlayers(players);
                 }
+
+                cameraController.SetShopTarget(arena.OwnSegment);
                 break;
             case GameState.END_PHASE:
                 break;

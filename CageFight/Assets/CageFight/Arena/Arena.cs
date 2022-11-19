@@ -2,6 +2,7 @@ using ExitGames.Client.Photon;
 using Photon.Pun;
 using Photon.Realtime;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Arena : MonoBehaviourPunCallbacks {
@@ -9,6 +10,8 @@ public class Arena : MonoBehaviourPunCallbacks {
     private List<ArenaSegment> segments;
     [SerializeField]
     private Color defaultBannerColor = Color.black;
+
+    public ArenaSegment OwnSegment { get => segments.First(s => s.Owner == PhotonNetwork.LocalPlayer); }
 
     private void Awake() {
         segments.ForEach(s => s.DeassignOwnership(defaultBannerColor));

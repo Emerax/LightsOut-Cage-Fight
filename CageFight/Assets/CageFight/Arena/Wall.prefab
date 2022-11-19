@@ -48,6 +48,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bannerRenderer: {fileID: 8506724437525312705}
   scoreText: {fileID: 9032173617909771312}
+  cameraHolder: {fileID: 2827308365878372171}
 --- !u!1 &8394384387897897126
 GameObject:
   m_ObjectHideFlags: 0
@@ -432,6 +433,11 @@ PrefabInstance:
     m_RemovedComponents: []
     m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: bd4366bfd056aad45ab15f6f053a1898, type: 3}
+--- !u!4 &2827308365878372171 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8333077242896568680, guid: bd4366bfd056aad45ab15f6f053a1898, type: 3}
+  m_PrefabInstance: {fileID: 6096066713715373603}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &8945694898783855727 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2935478881896845900, guid: bd4366bfd056aad45ab15f6f053a1898, type: 3}

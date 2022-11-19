@@ -10,10 +10,15 @@ public class ArenaSegment : MonoBehaviour {
     private Renderer bannerRenderer;
     [SerializeField]
     private TMP_Text scoreText;
-    private Player owner;
+    [SerializeField]
+    private Transform cameraHolder;
+
+    public Transform CameraHolderTransform { get => cameraHolder; }
+
+    public Player Owner { get; private set; }
 
     public void AssignToPlayer(Player player) {
-        owner = player;
+        Owner = player;
 
         if(player.CustomProperties.TryGetValue(GameLogic.COLOR_KEY, out object color)) {
             bannerRenderer.material.color = GameLogic.Vector3ToColor((Vector3)color);
@@ -24,19 +29,19 @@ public class ArenaSegment : MonoBehaviour {
     }
 
     public void DeassignOwnership(Color color) {
-        owner = null;
+        Owner = null;
         bannerRenderer.material.color = color;
         scoreText.text = "";
     }
 
     public void OnScoreUpdated(Player targetPlayer, int score) {
-        if(targetPlayer == owner) {
+        if(targetPlayer == Owner) {
             scoreText.text = $"Score:\n{score}";
         }
     }
 
     internal void OnColorUpdated(Player targetPlayer, Color color) {
-        if(targetPlayer == owner) {
+        if(targetPlayer == Owner) {
             bannerRenderer.material.color = color;
         }
     }
