@@ -4,17 +4,18 @@ using UnityEngine;
 
 public class MonsterManager {
 
-    private List<IMonsterController> monsterControllers;
+    private readonly List<IMonsterController> monsterControllers;
 
     public MonsterManager() {
         monsterControllers = new List<IMonsterController>();
     }
 
     public GameObject SpawnMonster() {
+        int team = PhotonNetwork.LocalPlayer.ActorNumber;
         float moveSpeed = 1f;
         Vector2 startPosition = 10f * Vector2.left;
         ArenaData arenaData = new(Vector2.zero);
-        MonsterData monsterData = new(moveSpeed, startPosition);
+        MonsterData monsterData = new(team, moveSpeed, startPosition);
         monsterControllers.Add(new MeleeController(arenaData, monsterData));
 
         GameObject go = PhotonNetwork.Instantiate("Monster", new Vector3(startPosition.x, 0, startPosition.y), Quaternion.identity, 0, monsterData.ToObjectArray());

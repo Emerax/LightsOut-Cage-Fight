@@ -11,8 +11,23 @@ public struct MeleeController : IMonsterController {
     }
 
     public void Tick(float deltaTime) {
-        Vector2 toTarget = arenaData.centerPosition - monsterData.position;
-        Vector2 startPosition = monsterData.position;
+        MonsterData closestEnemy = null;
+        float closestEnemyDistance = float.MaxValue;
+        foreach(MonsterData enemy in MonsterList.Instance.GetMonstersOfOtherTeams(monsterData.Team)) {
+            var distanceToEnemy = Vector2.Distance(monsterData.position, enemy.position);
+            if(distanceToEnemy < closestEnemyDistance) {
+                closestEnemy = enemy;
+                closestEnemyDistance = distanceToEnemy;
+            }
+        }
+
+        Vector2 toTarget;
+        if(closestEnemyDistance < 5f) {
+            toTarget = closestEnemy.position - monsterData.position;
+        }
+        else {
+            toTarget = arenaData.centerPosition - monsterData.position;
+        }
         monsterData.position += deltaTime * monsterData.MovementSpeed * toTarget.normalized;
     }
 }

@@ -10,6 +10,10 @@ public class MonsterBehaviour : MonoBehaviourPun, IPunInstantiateMagicCallback, 
 
     public void OnPhotonInstantiate(PhotonMessageInfo info) {
         monsterData = MonsterData.FromObjectArray(info.photonView.InstantiationData);
+        Debug.Log($"Instantiated Monster on team {monsterData.Team}");
+        if(!photonView.IsMine) {
+            MonsterList.Instance.AddMonster(monsterData);
+        }
     }
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) {
@@ -32,8 +36,15 @@ public class MonsterBehaviour : MonoBehaviourPun, IPunInstantiateMagicCallback, 
         }
     }
 
+    private void OnDestroy() {
+        Debug.Log($"Destroyed Monster on team {monsterData.Team}");
+        MonsterList.Instance.RemoveMonster(monsterData);
+    }
+
+    // Used on owner side
     public void SetMonsterData(MonsterData monsterData) {
         this.monsterData = monsterData;
+        MonsterList.Instance.AddMonster(this.monsterData);
     }
 
     private void LateUpdate() {
