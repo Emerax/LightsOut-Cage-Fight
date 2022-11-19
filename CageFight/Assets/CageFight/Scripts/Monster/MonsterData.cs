@@ -1,32 +1,36 @@
-using Photon.Pun;
+using System;
 using UnityEngine;
 
 public class MonsterData {
 
     public int Team { get; private set; }
-    public float MovementSpeed { get; private set; }
 
+    public float health;
     public Vector2 position;
 
-    public MonsterData(int team, float movementSpeed, Vector2 startPosition) {
+    public bool isSynced;
+
+    public Action<float> OnDamageReceived;
+
+    public MonsterData(int team, float startHealth, Vector2 startPosition, bool isSynced) {
         Team = team;
-        MovementSpeed = movementSpeed;
+        health = startHealth;
         position = startPosition;
+        this.isSynced = isSynced;
     }
 
     public object[] ToObjectArray() {
         return new object[] {
             Team,
-            MovementSpeed,
+            health,
             position
         };
     }
 
     public static MonsterData FromObjectArray(object[] objects) {
         int team = (int)objects[0];
-        float movementSpeed = (float)objects[1];
+        float health = (float)objects[1];
         Vector2 position = (Vector2)objects[2];
-        return new MonsterData(team, movementSpeed, position);
-
+        return new MonsterData(team, health, position, isSynced: false);
     }
 }

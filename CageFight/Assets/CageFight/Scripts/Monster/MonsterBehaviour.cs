@@ -3,52 +3,74 @@ using UnityEngine;
 
 public class MonsterBehaviour : MonoBehaviourPun, IPunInstantiateMagicCallback, IPunObservable {
 
-    private MonsterData monsterData;
+    public MonsterData Data { get; private set; }
+
+    private IMonsterController monsterController;
 
     private bool isFirstNetworkRead = true;
     private float networkPositionDelta = 0f;
 
     public void OnPhotonInstantiate(PhotonMessageInfo info) {
-        monsterData = MonsterData.FromObjectArray(info.photonView.InstantiationData);
-        Debug.Log($"Instantiated Monster on team {monsterData.Team}");
-        if(!photonView.IsMine) {
-            MonsterList.Instance.AddMonster(monsterData);
-        }
+        Data = MonsterData.FromObjectArray(info.photonView.InstantiationData);
+        Debug.Log($"Instantiated Monster on team {Data.Team}");
+        MonsterList.Instance.AddMonster(this);
     }
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) {
         if(stream.IsWriting) {
-            stream.SendNext(monsterData.position);
+            stream.SendNext(Data.position);
         }
         else if(stream.IsReading) {
-            Vector2 prevPosittion = monsterData.position;
+            Vector2 prevPosittion = Data.position;
 
-            monsterData.position = (Vector2)stream.ReceiveNext();
+            Data.position = (Vector2)stream.ReceiveNext();
 
             if(isFirstNetworkRead) {
-                transform.position = new Vector3(monsterData.position.x, transform.position.y, monsterData.position.y);
+                Data.isSynced = true;
+                transform.position = new Vector3(Data.position.x, transform.position.y, Data.position.y);
                 networkPositionDelta = 0;
                 isFirstNetworkRead = false;
             }
             else {
-                networkPositionDelta = Vector2.Distance(prevPosittion, monsterData.position);
+                networkPositionDelta = Vector2.Distance(prevPosittion, Data.position);
             }
         }
     }
 
     private void OnDestroy() {
-        Debug.Log($"Destroyed Monster on team {monsterData.Team}");
-        MonsterList.Instance.RemoveMonster(monsterData);
+        Debug.Log($"Destroyed Monster on team {Data.Team}");
+        MonsterList.Instance.RemoveMonster(this);
+        if(monsterController != null) {
+            monsterController.OnDeath -= OnDeath;
+        }
     }
 
-    // Used on owner side
-    public void SetMonsterData(MonsterData monsterData) {
-        this.monsterData = monsterData;
-        MonsterList.Instance.AddMonster(this.monsterData);
+    public void SetController(IMonsterController monsterController, MonsterData monsterData) {
+        Data = monsterData;
+        this.monsterController = monsterController;
+        monsterController.OnDeath += OnDeath;
+    }
+
+    public void ReceiveDamage(float damage) {
+        if(photonView.IsMine) {
+            monsterController.ReceiveDamage(damage);
+        }
+        else {
+            photonView.RPC(nameof(ReceiveDamageRPC), photonView.Owner, damage);
+        }
+    }
+
+    [PunRPC]
+    public void ReceiveDamageRPC(float damage) {
+        ReceiveDamage(damage);
+    }
+
+    public void OnDeath(IMonsterController _) {
+        PhotonNetwork.Destroy(gameObject);
     }
 
     private void LateUpdate() {
-        Vector3 targetPosition = new(monsterData.position.x, transform.position.y, monsterData.position.y);
+        Vector3 targetPosition = new(Data.position.x, transform.position.y, Data.position.y);
         if(photonView.IsMine) {
             transform.position = targetPosition;
         }

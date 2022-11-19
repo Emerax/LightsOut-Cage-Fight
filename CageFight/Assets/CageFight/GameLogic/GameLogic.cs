@@ -125,6 +125,11 @@ public class GameLogic : MonoBehaviourPunCallbacks {
         }
     }
 
+    public override void OnPlayerLeftRoom(Player otherPlayer) {
+        base.OnPlayerLeftRoom(otherPlayer);
+        Debug.Log($"Player {otherPlayer} left the room");
+    }
+
     private void LoadPlatformSpecificContent() {
 #if UNITY_ANDROID
         Instantiate(androidVotingUI);

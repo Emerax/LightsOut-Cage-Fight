@@ -11,30 +11,30 @@ public class MonsterList {
         }
     }
 
-    private readonly List<MonsterData> monsters;
+    private readonly List<MonsterBehaviour> monsters;
 
     private MonsterList() {
-        monsters = new List<MonsterData>();
+        monsters = new List<MonsterBehaviour>();
     }
 
-    public void AddMonster(MonsterData monster) {
+    public void AddMonster(MonsterBehaviour monster) {
         monsters.Add(monster);
     }
 
-    public void RemoveMonster(MonsterData monster) {
+    public void RemoveMonster(MonsterBehaviour monster) {
         monsters.Remove(monster);
     }
 
 
-    public IEnumerable<MonsterData> GetMonstersAll() {
+    public IEnumerable<MonsterBehaviour> GetMonstersAll() {
         return monsters;
     }
 
-    public IEnumerable<MonsterData> GetMonstersOfTeam(int team) {
-        return monsters.Where(monster => { return monster.Team == team; });
+    public IEnumerable<MonsterBehaviour> GetMonstersOfTeam(int team) {
+        return monsters.Where(monster => { return monster.Data.Team == team; });
     }
 
-    public IEnumerable<MonsterData> GetMonstersOfOtherTeams(int team) {
-        return monsters.Where(monster => { return monster.Team != team; });
+    public IEnumerable<MonsterBehaviour> GetMonstersOfOtherTeams(int team) {
+        return monsters.Where(monster => { return monster.Data.Team != team; });
     }
 }
