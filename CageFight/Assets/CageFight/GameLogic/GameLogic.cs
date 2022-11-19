@@ -55,10 +55,6 @@ public class GameLogic : MonoBehaviourPunCallbacks {
 
     private void Start() {
         monsterManager = new MonsterManager();
-        Hashtable props = new() {
-            { READY_KEY, true }
-        };
-        PhotonNetwork.LocalPlayer.SetCustomProperties(props);
     }
 
     private void Update() {
@@ -109,6 +105,7 @@ public class GameLogic : MonoBehaviourPunCallbacks {
 
         LocalPlayer = new(PhotonNetwork.LocalPlayer, startingMoney);
         LocalPlayer.MoneyChangeAction += OnPlayerMoneyChanged;
+        LocalPlayer.ToggleReady(true);
         OnPlayerMoneyChanged(LocalPlayer.Money);
         foreach(Shop shop in FindObjectsOfType<Shop>()) {
             shop.SetLocalPlayer(LocalPlayer);
@@ -126,6 +123,20 @@ public class GameLogic : MonoBehaviourPunCallbacks {
 
         if(PhotonNetwork.IsMasterClient) {
             newPlayer.SetCustomProperties(new Hashtable() { { COLOR_KEY, ColorToVector3(playerColors[nextPlayerColorIndex++]) } });
+        }
+    }
+
+    public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps) {
+        switch(state) {
+            case GameState.SHOP_PHASE:
+                if(changedProps.TryGetValue(READY_KEY, out object _)) {
+                    if(AllPlayersAreReady()) {
+                        ChangeState(GameState.COMBAT_PHASE);
+                    }
+                }
+                break;
+            default:
+                break;
         }
     }
 
@@ -155,7 +166,7 @@ public class GameLogic : MonoBehaviourPunCallbacks {
     }
 
     private void StartGame() {
-        photonView.RPC(nameof(ChangeState), RpcTarget.All, GameState.SHOP_PHASE);
+        ChangeState(GameState.SHOP_PHASE);
     }
 
     private bool AllPlayersAreReady() {
@@ -174,16 +185,18 @@ public class GameLogic : MonoBehaviourPunCallbacks {
         ui.SetMoneyDisplay(money);
     }
 
+    private void ChangeState(GameState gameState) {
+        photonView.RPC(nameof(ChangeStateRPC), RpcTarget.All, gameState);
+    }
+
     [PunRPC]
-    private void ChangeState(GameState newState) {
+    private void ChangeStateRPC(GameState newState) {
         //Handle exiting old state. Guard with PhotonNetwork.IsMasterClient as needed.
         switch(state) {
             case GameState.PRE_PHASE:
                 Debug.Log("Starting game!");
                 players = new List<Player>(PhotonNetwork.PlayerList); //This should never need another update, hopefully.
-                if(PhotonNetwork.IsMasterClient) {
-                    arena.AssignSegmentsToPlayers(players);
-                }
+                LocalPlayer.ToggleReady(false);
                 break;
             case GameState.COMBAT_PHASE:
                 //Cleanup ALL THE MONSTERS!
@@ -203,11 +216,12 @@ public class GameLogic : MonoBehaviourPunCallbacks {
 
         //Handle entering new state.
         switch(state) {
-            case GameState.PRE_PHASE:
-                break;
             case GameState.COMBAT_PHASE:
                 break;
             case GameState.SHOP_PHASE:
+                if(PhotonNetwork.IsMasterClient) {
+                    arena.AssignSegmentsToPlayers(players);
+                }
                 break;
             case GameState.END_PHASE:
                 break;

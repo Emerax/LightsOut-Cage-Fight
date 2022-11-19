@@ -37,4 +37,8 @@ public class GladiatorManager {
     public void RemoveMoney(int cost) {
         Money -= cost;
     }
+
+    public void ToggleReady(bool ready) {
+        player.SetCustomProperties(new ExitGames.Client.Photon.Hashtable() { { GameLogic.READY_KEY, ready } });
+    }
 }

@@ -11,6 +11,9 @@ public class Shop : MonoBehaviour {
     [SerializeField]
     private Cage cagePrefab;
 
+    [SerializeField]
+    private DoneButton doneButton;
+
     private readonly Dictionary<CageSlot, Cage> cageSlots = new();
     private Cage currentCage;
     private GladiatorManager localPlayer;
@@ -33,6 +36,8 @@ public class Shop : MonoBehaviour {
         foreach(CageSlot slot in slots) {
             slot.MouseOverAction += OnSlotMouseOver;
         }
+
+        doneButton.ToggleReadyAction += OnReadyToggle;
     }
 
     private void Update() {
@@ -76,6 +81,10 @@ public class Shop : MonoBehaviour {
                 AttachCageToSlot(currentCage, slot);
             }
         }
+    }
+
+    private void OnReadyToggle(bool ready) {
+        localPlayer.ToggleReady(ready);
     }
 
     private bool TryFindVacantSlot(out CageSlot cageSlot) {

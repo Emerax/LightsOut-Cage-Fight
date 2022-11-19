@@ -42,7 +42,6 @@ public class Arena : MonoBehaviourPunCallbacks {
 
     [PunRPC]
     private void AssignSegmentRPC(int segmentIndex, Player newOwner) {
-        Debug.Log("Assigning");
         segments[segmentIndex].AssignToPlayer(newOwner);
     }
 
