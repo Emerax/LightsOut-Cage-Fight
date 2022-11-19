@@ -8,7 +8,7 @@ public class MonsterFactory {
         float startHealth = 10f;
         Vector2 startPosition = 10f * Vector2.left;
         ArenaData arenaData = new(Vector2.zero);
-        MonsterData monsterData = new(team, startHealth, startPosition, isSynced: true);
+        MonsterData monsterData = new(team, startHealth, startHealth, startPosition, isSynced: true);
 
         float moveSpeed = 1f;
         float attackRange = 1f;
