@@ -1,0 +1,99 @@
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Shop : MonoBehaviour {
+    [SerializeField]
+    private List<Transform> spawnPoints;
+
+    [SerializeField]
+    private List<CageSlot> slots;
+
+    [SerializeField]
+    private Cage cagePrefab;
+
+    private readonly Dictionary<CageSlot, Cage> cageSlots = new();
+    private Cage currentCage;
+
+    public enum CageEventType {
+        BOUGHT,
+        SOLD,
+        BEGIN_CLICK,
+        END_CLICK
+    }
+
+    private void Awake() {
+        for(int i = 0; i < spawnPoints.Count; i++) {
+            Transform spawnPointTransform = spawnPoints[i];
+            Cage cage = Instantiate(cagePrefab, spawnPointTransform.position, spawnPointTransform.rotation);
+            cage.Init(i);
+            cage.CageEventAction += OnCageEvent;
+        }
+
+        foreach(CageSlot slot in slots) {
+            slot.MouseOverAction += OnSlotMouseOver;
+        }
+    }
+
+    private void Update() {
+        if(Input.GetMouseButtonUp(0)) {
+            currentCage = null;
+        }
+    }
+
+    private void OnCageEvent(CageEventType type, Cage cage) {
+        switch(type) {
+            case CageEventType.BOUGHT:
+                if(TryFindVacantSlot(out CageSlot slot)) {
+                    AttachCageToSlot(cage, slot);
+                    cage.OnBought();
+                }
+                break;
+            case CageEventType.SOLD:
+                break;
+            case CageEventType.BEGIN_CLICK:
+                currentCage = cage;
+                break;
+            case CageEventType.END_CLICK:
+                currentCage = null;
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void OnSlotMouseOver(CageSlot slot) {
+        if(currentCage != null) {
+            if(!cageSlots.TryGetValue(slot, out Cage cage) || cage == null) {
+                ClearCageFromSlot(currentCage);
+                AttachCageToSlot(currentCage, slot);
+            }
+        }
+    }
+
+    private bool TryFindVacantSlot(out CageSlot cageSlot) {
+        foreach(CageSlot slot in slots) {
+            if(!cageSlots.TryGetValue(slot, out Cage _)) {
+                cageSlot = slot;
+                return true;
+            }
+        }
+
+        cageSlot = null;
+        return false;
+    }
+
+    private void AttachCageToSlot(Cage cage, CageSlot slot) {
+        cage.transform.position = slot.AttachPoint.position;
+        cageSlots[slot] = cage;
+    }
+
+    private void ClearCageFromSlot(Cage cageToClear) {
+        foreach(CageSlot slot in slots) {
+            if(cageSlots.TryGetValue(slot, out Cage cage)) {
+                if(cage == cageToClear) {
+                    cageSlots[slot] = null;
+                }
+            }
+        }
+    }
+}
