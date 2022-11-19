@@ -29,18 +29,21 @@ public class GameLogic : MonoBehaviourPunCallbacks {
 
     private MonsterManager monsterManager;
     private UI ui;
+    private Arena arena;
     private int nextPlayerColorIndex = 0;
+    private List<Player> players;
 
     private enum GameState {
-        PRE_PHASE,
-        COMBAT_PHASE,
-        SHOP_PHASE,
-        END_PHASE
+        PRE_PHASE = 0,
+        COMBAT_PHASE = 1,
+        SHOP_PHASE = 2,
+        END_PHASE = 3
     }
 
     private GameState state = GameState.PRE_PHASE;
 
     private void Awake() {
+        arena = FindObjectOfType<Arena>();
 #if UNITY_ANDROID || UNITY_IOS || UNITY_WEBGL
         //These clients should never be master.
         //Try to join room, else... coroutine for 5 seconds and retry?
@@ -79,7 +82,7 @@ public class GameLogic : MonoBehaviourPunCallbacks {
         switch(state) {
             case GameState.PRE_PHASE:
                 if(Input.GetKeyDown(KeyCode.Return)) {
-                    if(AllPlayersAreReady()) {
+                    if(PhotonNetwork.IsMasterClient && AllPlayersAreReady()) {
                         StartGame();
                     }
                 }
@@ -98,6 +101,7 @@ public class GameLogic : MonoBehaviourPunCallbacks {
         if(PhotonNetwork.IsMasterClient) {
             //First time setup goes here! This player should decide when the game starts.
             PhotonNetwork.EnableCloseConnection = true;
+            PhotonNetwork.LocalPlayer.SetCustomProperties(new Hashtable() { { COLOR_KEY, ColorToVector3(playerColors[nextPlayerColorIndex++]) } });
         }
         else {
             //Yer a pleb!
@@ -121,8 +125,16 @@ public class GameLogic : MonoBehaviourPunCallbacks {
         }
 
         if(PhotonNetwork.IsMasterClient) {
-            newPlayer.SetCustomProperties(new Hashtable() { { COLOR_KEY, playerColors[nextPlayerColorIndex++] } });
+            newPlayer.SetCustomProperties(new Hashtable() { { COLOR_KEY, ColorToVector3(playerColors[nextPlayerColorIndex++]) } });
         }
+    }
+
+    public static Vector3 ColorToVector3(Color c) {
+        return new Vector3(c.r, c.g, c.b);
+    }
+
+    public static Color Vector3ToColor(Vector3 v) {
+        return new Color(v.x, v.y, v.z);
     }
 
     private void LoadPlatformSpecificContent() {
@@ -138,7 +150,7 @@ public class GameLogic : MonoBehaviourPunCallbacks {
     }
 
     private void StartGame() {
-        photonView.RPC(nameof(ChangeState), RpcTarget.All, GameState.COMBAT_PHASE);
+        photonView.RPC(nameof(ChangeState), RpcTarget.All, GameState.SHOP_PHASE);
     }
 
     private bool AllPlayersAreReady() {
@@ -162,8 +174,11 @@ public class GameLogic : MonoBehaviourPunCallbacks {
         //Handle exiting old state. Guard with PhotonNetwork.IsMasterClient as needed.
         switch(state) {
             case GameState.PRE_PHASE:
-                //Close room so no more people enter perhaps?
                 Debug.Log("Starting game!");
+                players = new List<Player>(PhotonNetwork.PlayerList); //This should never need another update, hopefully.
+                if(PhotonNetwork.IsMasterClient) {
+                    arena.AssignSegmentsToPlayers(players);
+                }
                 break;
             case GameState.COMBAT_PHASE:
                 //Cleanup ALL THE MONSTERS!
@@ -179,6 +194,7 @@ public class GameLogic : MonoBehaviourPunCallbacks {
         }
 
         state = newState;
+        Debug.Log($"Start {state}");
 
         //Handle entering new state.
         switch(state) {
@@ -187,6 +203,7 @@ public class GameLogic : MonoBehaviourPunCallbacks {
             case GameState.COMBAT_PHASE:
                 break;
             case GameState.SHOP_PHASE:
+
                 break;
             case GameState.END_PHASE:
                 break;

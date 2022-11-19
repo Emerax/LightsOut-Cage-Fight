@@ -47,6 +47,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bannerRenderer: {fileID: 8506724437525312705}
+  scoreText: {fileID: 9032173617909771312}
 --- !u!1 &8394384387897897126
 GameObject:
   m_ObjectHideFlags: 0

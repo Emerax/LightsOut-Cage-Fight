@@ -355,9 +355,41 @@ PrefabInstance:
     serializedVersion: 2
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1118292798739158780, guid: 181321211df1b5246ad3d6f14c472fe6, type: 3}
+      propertyPath: sceneViewId
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 2138196081879803306, guid: 181321211df1b5246ad3d6f14c472fe6, type: 3}
       propertyPath: m_Name
       value: Arena
+      objectReference: {fileID: 0}
+    - target: {fileID: 3754249755106847466, guid: 181321211df1b5246ad3d6f14c472fe6, type: 3}
+      propertyPath: sceneViewId
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 3847165203124294415, guid: 181321211df1b5246ad3d6f14c472fe6, type: 3}
+      propertyPath: sceneViewId
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 4179859778210348731, guid: 181321211df1b5246ad3d6f14c472fe6, type: 3}
+      propertyPath: sceneViewId
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 6206511472849244123, guid: 181321211df1b5246ad3d6f14c472fe6, type: 3}
+      propertyPath: sceneViewId
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 6354323186591876693, guid: 181321211df1b5246ad3d6f14c472fe6, type: 3}
+      propertyPath: sceneViewId
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 6930917231084146442, guid: 181321211df1b5246ad3d6f14c472fe6, type: 3}
+      propertyPath: sceneViewId
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7762374466178218181, guid: 181321211df1b5246ad3d6f14c472fe6, type: 3}
+      propertyPath: sceneViewId
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 8341874046741730248, guid: 181321211df1b5246ad3d6f14c472fe6, type: 3}
       propertyPath: m_RootOrder
@@ -402,6 +434,10 @@ PrefabInstance:
     - target: {fileID: 8341874046741730248, guid: 181321211df1b5246ad3d6f14c472fe6, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9220483890443576369, guid: 181321211df1b5246ad3d6f14c472fe6, type: 3}
+      propertyPath: sceneViewId
+      value: 9
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_AddedGameObjects: []

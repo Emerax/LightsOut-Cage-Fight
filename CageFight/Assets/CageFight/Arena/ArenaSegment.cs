@@ -1,5 +1,3 @@
-using ExitGames.Client.Photon;
-using Photon.Pun;
 using Photon.Realtime;
 using TMPro;
 using UnityEngine;
@@ -7,7 +5,7 @@ using UnityEngine;
 /// <summary>
 /// 1/8 of the arena. Owned by a player who will use the shop.
 /// </summary>
-public class ArenaSegment : MonoBehaviourPunCallbacks {
+public class ArenaSegment : MonoBehaviour {
     [SerializeField]
     private Renderer bannerRenderer;
     [SerializeField]
@@ -18,7 +16,7 @@ public class ArenaSegment : MonoBehaviourPunCallbacks {
         owner = player;
 
         if(player.CustomProperties.TryGetValue(GameLogic.COLOR_KEY, out object color)) {
-            bannerRenderer.material.color = (Color)color;
+            bannerRenderer.material.color = GameLogic.Vector3ToColor((Vector3)color);
         }
 
         int ownerScore = (int)player.CustomProperties[GameLogic.SCORE_KEY];
@@ -31,14 +29,15 @@ public class ArenaSegment : MonoBehaviourPunCallbacks {
         scoreText.text = "";
     }
 
-    public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps) {
-        if(owner != null && targetPlayer == owner) {
-            if(changedProps.TryGetValue(GameLogic.SCORE_KEY, out object score)) {
-                scoreText.text = $"Score:\n{(int)score}";
-            }
-            if(changedProps.TryGetValue(GameLogic.COLOR_KEY, out object color)) {
-                bannerRenderer.material.color = (Color)color;
-            }
+    public void OnScoreUpdated(Player targetPlayer, int score) {
+        if(targetPlayer == owner) {
+            scoreText.text = $"Score:\n{score}";
+        }
+    }
+
+    internal void OnColorUpdated(Player targetPlayer, Color color) {
+        if(targetPlayer == owner) {
+            bannerRenderer.material.color = color;
         }
     }
 }
