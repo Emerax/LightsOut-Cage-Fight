@@ -4,11 +4,12 @@ using UnityEngine;
 using static Shop;
 
 public class Cage : MonoBehaviour {
-    private int slotNumber;
     public Action<CageEventType, Cage> CageEventAction;
+    public int Cost { get => cost; private set => cost = value; }
 
     private List<IMonsterController> monsters;
     private bool bought = false;
+    private int cost = 60;
 
     private void OnMouseDown() {
         if(bought) {
@@ -26,7 +27,6 @@ public class Cage : MonoBehaviour {
     }
 
     public void Init(int slot) {
-        slotNumber = slot;
     }
 
     public void OnBought() {

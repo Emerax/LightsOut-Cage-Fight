@@ -13,6 +13,7 @@ public class Shop : MonoBehaviour {
 
     private readonly Dictionary<CageSlot, Cage> cageSlots = new();
     private Cage currentCage;
+    private GladiatorManager localPlayer;
 
     public enum CageEventType {
         BOUGHT,
@@ -40,12 +41,19 @@ public class Shop : MonoBehaviour {
         }
     }
 
+    public void SetLocalPlayer(GladiatorManager gladiatorManager) {
+        localPlayer = gladiatorManager;
+    }
+
     private void OnCageEvent(CageEventType type, Cage cage) {
         switch(type) {
             case CageEventType.BOUGHT:
-                if(TryFindVacantSlot(out CageSlot slot)) {
-                    AttachCageToSlot(cage, slot);
-                    cage.OnBought();
+                if(localPlayer.Money >= cage.Cost) {
+                    localPlayer.RemoveMoney(cage.Cost);
+                    if(TryFindVacantSlot(out CageSlot slot)) {
+                        AttachCageToSlot(cage, slot);
+                        cage.OnBought();
+                    }
                 }
                 break;
             case CageEventType.SOLD:

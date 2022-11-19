@@ -67,7 +67,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 115c45168bba4aa40ba1566a66ec6cc0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameplaySceneUI: {fileID: 4510797833359447117, guid: a09f5a9aee4191546a743f36bd666fb3, type: 3}
+  gameplaySceneUI: {fileID: 2255161455819905298, guid: a09f5a9aee4191546a743f36bd666fb3, type: 3}
   androidVotingUI: 
   iphoneVotingUI: 
   webVotingUI: 
+  playerColors:
+  - {r: 0.5754717, g: 0.07962495, b: 0.07962495, a: 1}
+  - {r: 0.029073156, g: 0.043654416, b: 0.6603774, a: 1}
+  - {r: 0.060797658, g: 0.4811321, b: 0, a: 1}
+  - {r: 0.7830189, g: 0.5032456, b: 0, a: 1}
+  - {r: 0.9583576, g: 1, b: 0, a: 1}
+  - {r: 0.047822434, g: 0.5849056, b: 0.4888094, a: 1}
+  - {r: 1, g: 0, b: 0.9437647, a: 1}
+  - {r: 0.6173992, g: 0, b: 1, a: 1}
+  startingMoney: 100
