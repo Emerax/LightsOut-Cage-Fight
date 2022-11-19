@@ -29,11 +29,11 @@ public class CameraController : MonoBehaviour {
         float frameAcceleration = 0;
         if(Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow)) {
             //Go left
-            frameAcceleration = -acceleration * Time.deltaTime;
+            frameAcceleration = acceleration * Time.deltaTime;
         }
         else if(Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow)) {
             //Go right
-            frameAcceleration = acceleration * Time.deltaTime;
+            frameAcceleration = -acceleration * Time.deltaTime;
         }
 
         if(frameAcceleration != 0f) {
