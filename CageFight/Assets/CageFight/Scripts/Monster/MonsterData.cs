@@ -4,6 +4,9 @@ using UnityEngine;
 public class MonsterData {
 
     public int Team { get; private set; }
+    public MonsterVariantID ID { get; private set; }
+    public float Width { get; private set; }
+    public float Height { get; private set; }
     public float MaxHealth { get; private set; }
 
     public float health;
@@ -13,8 +16,11 @@ public class MonsterData {
 
     public Action<float> OnDamageReceived;
 
-    public MonsterData(int team, float maxHealth, float health, Vector2 startPosition, bool isSynced) {
+    public MonsterData(int team, MonsterVariantID id, float width, float height, float maxHealth, float health, Vector2 startPosition, bool isSynced) {
         Team = team;
+        ID = id;
+        Width = width;
+        Height = height;
         MaxHealth = maxHealth;
         this.health = health;
         position = startPosition;
@@ -24,6 +30,9 @@ public class MonsterData {
     public object[] ToObjectArray() {
         return new object[] {
             Team,
+            ID,
+            Width,
+            Height,
             MaxHealth,
             health,
             position
@@ -32,9 +41,12 @@ public class MonsterData {
 
     public static MonsterData FromObjectArray(object[] objects) {
         int team = (int)objects[0];
-        float maxHealth = (float)objects[1];
-        float health = (float)objects[2];
-        Vector2 position = (Vector2)objects[3];
-        return new MonsterData(team, maxHealth, health, position, isSynced: false);
+        MonsterVariantID id = (MonsterVariantID)objects[1];
+        float width = (float)objects[2];
+        float height = (float)objects[3];
+        float maxHealth = (float)objects[4];
+        float health = (float)objects[5];
+        Vector2 position = (Vector2)objects[6];
+        return new MonsterData(team, id, width, height, maxHealth, health, position, isSynced: false);
     }
 }

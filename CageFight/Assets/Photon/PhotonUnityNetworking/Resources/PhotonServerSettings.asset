@@ -38,11 +38,11 @@ MonoBehaviour:
   - DestroyRpc
   - SendMessageRPC
   - SayHiRPC
-  - ChangeState
   - AssignSegmentRPC
   - DeassignSegmentRPC
   - ReceiveDamageRPC
   - ChangeStateRPC
+  - DebugSpawnMonstersRPC
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
