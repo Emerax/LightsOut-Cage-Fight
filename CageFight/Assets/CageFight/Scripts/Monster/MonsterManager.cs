@@ -10,22 +10,12 @@ public class MonsterManager {
         monsterControllers = new List<IMonsterController>();
     }
 
-    public GameObject SpawnMonster() {
-        int team = PhotonNetwork.LocalPlayer.ActorNumber;
-        float startHealth = 10f;
-        Vector2 startPosition = 10f * Vector2.left;
-        ArenaData arenaData = new(Vector2.zero);
-        MonsterData monsterData = new(team, startHealth, startPosition, isSynced: true);
-        float moveSpeed = 1f;
-        float attackRange = 1f;
-        float attackCooldown = 2f;
-        float attackDamage = 5f;
-        IMonsterController monsterController = new MeleeController(arenaData, monsterData, moveSpeed, attackRange, attackCooldown, attackDamage);
+    public GameObject SpawnMonster(IMonsterController monsterController) {
         monsterControllers.Add(monsterController);
         monsterController.OnDeath += OnMonsterDied;
-
-        GameObject go = PhotonNetwork.Instantiate("Monster", new Vector3(startPosition.x, 0, startPosition.y), Quaternion.identity, 0, monsterData.ToObjectArray());
-        go.GetComponent<MonsterBehaviour>().SetController(monsterController, monsterData);
+        MonsterData monsterData = monsterController.Data;
+        GameObject go = PhotonNetwork.Instantiate("Monster", new Vector3(monsterData.position.x, 0, monsterData.position.y), Quaternion.identity, 0, monsterData.ToObjectArray());
+        go.GetComponent<MonsterBehaviour>().SetController(monsterController);
         return go;
     }
 

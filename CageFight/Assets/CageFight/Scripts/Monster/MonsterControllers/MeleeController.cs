@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class MeleeController : IMonsterController {
 
+    public MonsterData Data => monsterData;
+
     private readonly ArenaData arenaData;
     private readonly MonsterData monsterData;
 

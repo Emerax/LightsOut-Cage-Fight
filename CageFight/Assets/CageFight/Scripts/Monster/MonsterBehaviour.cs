@@ -45,8 +45,8 @@ public class MonsterBehaviour : MonoBehaviourPun, IPunInstantiateMagicCallback, 
         }
     }
 
-    public void SetController(IMonsterController monsterController, MonsterData monsterData) {
-        Data = monsterData;
+    public void SetController(IMonsterController monsterController) {
+        Data = monsterController.Data;
         this.monsterController = monsterController;
         monsterController.OnDeath += OnDeath;
     }
