@@ -8,7 +8,7 @@ using UnityEngine;
 /// <summary>
 /// Top level logic for a game of Lights Out: Cage Figth (tm).
 /// </summary>
-public class GameLogic : MonoBehaviourPunCallbacks {
+public class GameLogic : MonoBehaviourPunCallbacks, IPunObservable {
     [SerializeField]
     private UI gameplaySceneUI;
     [SerializeField]
@@ -22,6 +22,10 @@ public class GameLogic : MonoBehaviourPunCallbacks {
     [SerializeField]
     private int startingMoney;
     [SerializeField]
+    private float shopTime = 5f;
+    [SerializeField]
+    private float combatTime = 5f;
+    [SerializeField]
     private MonsterSettings monsterSettings;
     public GladiatorManager LocalPlayer { get; private set; }
 
@@ -33,10 +37,12 @@ public class GameLogic : MonoBehaviourPunCallbacks {
     private MonsterManager monsterManager;
     private UI ui;
     private Arena arena;
+    private CameraController cameraController;
     private int nextPlayerColorIndex = 0;
     private List<Player> players;
+    private float remainingTime = 5f;
 
-    private enum GameState {
+    public enum GameState {
         PRE_PHASE = 0,
         COMBAT_PHASE = 1,
         SHOP_PHASE = 2,
@@ -48,6 +54,8 @@ public class GameLogic : MonoBehaviourPunCallbacks {
 
     private void Awake() {
         arena = FindObjectOfType<Arena>();
+        arena.ShopRelocated += OnShopRelocated;
+        cameraController = FindObjectOfType<CameraController>();
 #if UNITY_ANDROID || UNITY_IOS || UNITY_WEBGL
         //These clients should never be master.
         //Try to join room, else... coroutine for 5 seconds and retry?
@@ -61,6 +69,10 @@ public class GameLogic : MonoBehaviourPunCallbacks {
         monsterManager = new MonsterManager();
     }
 
+    private void OnDestroy() {
+        arena.ShopRelocated -= OnShopRelocated;
+    }
+
     private void Update() {
         UpdateInput();
         switch(state) {
@@ -69,13 +81,23 @@ public class GameLogic : MonoBehaviourPunCallbacks {
             case GameState.DEBUG_COMBAT_PHASE:
             case GameState.COMBAT_PHASE:
                 monsterManager.Tick(Time.deltaTime);
+                CheckTimer(GameState.SHOP_PHASE);
                 break;
             case GameState.SHOP_PHASE:
+                CheckTimer(GameState.COMBAT_PHASE);
                 break;
             case GameState.END_PHASE:
                 break;
             default:
                 break;
+        }
+    }
+
+    private void CheckTimer(GameState timeoutState) {
+        remainingTime -= Time.deltaTime;
+        ui.SetTimerTextDisplay(remainingTime);
+        if(remainingTime < 0f) {
+            ChangeState(timeoutState);
         }
     }
 
@@ -102,6 +124,15 @@ public class GameLogic : MonoBehaviourPunCallbacks {
         }
     }
 
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) {
+        if(stream.IsWriting) {
+            stream.SendNext(remainingTime);
+        }
+        else {
+            remainingTime = (float)stream.ReceiveNext();
+        }
+    }
+
     public override void OnConnectedToMaster() {
         PhotonNetwork.JoinRandomOrCreateRoom();
     }
@@ -121,9 +152,7 @@ public class GameLogic : MonoBehaviourPunCallbacks {
         LocalPlayer.MoneyChangeAction += OnPlayerMoneyChanged;
         LocalPlayer.ToggleReady(true);
         OnPlayerMoneyChanged(LocalPlayer.Money);
-        foreach(Shop shop in FindObjectsOfType<Shop>()) {
-            shop.SetLocalPlayer(LocalPlayer);
-        }
+        arena.shop.SetLocalPlayer(LocalPlayer);
     }
 
     public override void OnPlayerEnteredRoom(Player newPlayer) {
@@ -135,6 +164,13 @@ public class GameLogic : MonoBehaviourPunCallbacks {
             }
         }
 
+        if(state == GameState.PRE_PHASE) {
+            //Update number of non-ready players.
+            int readyPlayerCount = PhotonNetwork.PlayerList.Count(p => p.CustomProperties.TryGetValue(READY_KEY, out object ready) && (bool)ready);
+            int currentPlayerCount = PhotonNetwork.PlayerList.Length;
+            ui.SetReadyPlayersDisplay(readyPlayerCount, currentPlayerCount);
+        }
+
         if(PhotonNetwork.IsMasterClient) {
             newPlayer.SetCustomProperties(new Hashtable() { { COLOR_KEY, ColorToVector3(playerColors[nextPlayerColorIndex++]) } });
         }
@@ -142,10 +178,24 @@ public class GameLogic : MonoBehaviourPunCallbacks {
 
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps) {
         switch(state) {
+            case GameState.PRE_PHASE:
+                //Read READY here to update UI with number of ready players. Display in UI?
+                if(changedProps.TryGetValue(READY_KEY, out object _)) {
+                    int readyPlayerCount = PhotonNetwork.PlayerList.Count(p => p.CustomProperties.TryGetValue(READY_KEY, out object ready) && (bool)ready);
+                    int currentPlayerCount = PhotonNetwork.PlayerList.Length;
+                    ui.SetReadyPlayersDisplay(readyPlayerCount, currentPlayerCount);
+                }
+                break;
             case GameState.SHOP_PHASE:
+                Debug.Log($"State is now {state}");
                 if(changedProps.TryGetValue(READY_KEY, out object _)) {
                     if(AllPlayersAreReady()) {
                         ChangeState(GameState.COMBAT_PHASE);
+                    }
+                    else {
+                        int readyPlayerCount = players.Count(p => p.CustomProperties.TryGetValue(READY_KEY, out object ready) && (bool)ready);
+                        int currentPlayerCount = players.Count;
+                        ui.SetReadyPlayersDisplay(readyPlayerCount, currentPlayerCount);
                     }
                 }
                 break;
@@ -217,6 +267,7 @@ public class GameLogic : MonoBehaviourPunCallbacks {
                 break;
             case GameState.SHOP_PHASE:
                 //Hide away shops, re-spawn monsters.
+                cameraController.SetArenaTarget();
                 break;
             case GameState.END_PHASE:
                 //Reset everything for a new game?
@@ -226,16 +277,20 @@ public class GameLogic : MonoBehaviourPunCallbacks {
         }
 
         state = newState;
+        ui.OnEnterState(state);
         Debug.Log($"Start {state}");
 
         //Handle entering new state.
         switch(state) {
             case GameState.COMBAT_PHASE:
+                remainingTime = combatTime;
                 break;
             case GameState.SHOP_PHASE:
+                remainingTime = shopTime;
                 if(PhotonNetwork.IsMasterClient) {
                     arena.AssignSegmentsToPlayers(players);
                 }
+                arena.shop.OnNewShopPhase();
                 break;
             case GameState.END_PHASE:
                 break;
@@ -244,6 +299,12 @@ public class GameLogic : MonoBehaviourPunCallbacks {
                 break;
             default:
                 break;
+        }
+    }
+
+    public void OnShopRelocated() {
+        if(state == GameState.SHOP_PHASE) {
+            cameraController.SetShopTarget(arena.shop);
         }
     }
 

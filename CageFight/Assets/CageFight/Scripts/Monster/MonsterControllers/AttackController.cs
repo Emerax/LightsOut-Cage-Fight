@@ -41,23 +41,27 @@ public class AttackController : IMonsterController {
             }
         }
 
-        Vector2 toTarget;
-        if(closestEnemyDistance < 5f) {
-            toTarget = closestEnemy.Data.position - monsterData.position;
-        }
-        else {
-            toTarget = arenaData.centerPosition - monsterData.position;
-        }
-        monsterData.position += deltaTime * stats.movementSpeed * toTarget.normalized;
+        bool isCooldownLeft = attackCooldownLeft > 0;
 
-        if(attackCooldownLeft <= 0) {
-            if(closestEnemyDistance < stats.attackRange) {
+        if(closestEnemyDistance < stats.attackRange) {
+            if(!isCooldownLeft) {
                 closestEnemy.ReceiveDamage(stats.attackDamage);
                 attackCooldownLeft = stats.attackCooldown;
                 Debug.Log($"{Data.ID} monster on team {monsterData.Team} attacked {closestEnemy.Data.ID} monster on team {closestEnemy.Data.Team} from {closestEnemyDistance} m away.");
             }
         }
         else {
+            Vector2 toTarget;
+            if(closestEnemyDistance < 5f) {
+                toTarget = closestEnemy.Data.position - monsterData.position;
+            }
+            else {
+                toTarget = arenaData.centerPosition - monsterData.position;
+            }
+            monsterData.position += deltaTime * stats.movementSpeed * toTarget.normalized;
+        }
+
+        if(isCooldownLeft) {
             attackCooldownLeft -= deltaTime;
         }
     }
