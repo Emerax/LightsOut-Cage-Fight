@@ -6,9 +6,7 @@ public class Billboard : MonoBehaviour
     void Update() 
     {
         if (monster){
-            Vector3 camPos=Camera.main.transform.position;
-            camPos.y=0;  //arenan
-            transform.LookAt(camPos);
+            transform.LookAt(transform.position - Camera.main.transform.forward);
         }
         else{
              transform.rotation=Camera.main.transform.rotation;
