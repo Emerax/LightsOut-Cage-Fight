@@ -4,6 +4,10 @@ using UnityEngine;
 using static Shop;
 
 public class Cage : MonoBehaviour {
+
+    [SerializeField]
+    private SpriteRenderer sprite;
+
     public Action<CageEventType, Cage> CageEventAction;
     public int Cost { get => cost; private set => cost = value; }
     public List<IMonsterController> Monsters { get; private set; } = new();
@@ -35,7 +39,10 @@ public class Cage : MonoBehaviour {
 
         // Randomize monstet variant
         MonsterVariant[] monsterVariants = monsterSettings.monsterVariants;
-        monsterID = monsterVariants[UnityEngine.Random.Range(0, monsterVariants.Length)].identifier;
+        MonsterVariant monsterVariant = monsterVariants[UnityEngine.Random.Range(0, monsterVariants.Length)];
+        monsterID = monsterVariant.identifier;
+
+        sprite.sprite = monsterVariant.sprite;
     }
 
     public void OnBought() {
