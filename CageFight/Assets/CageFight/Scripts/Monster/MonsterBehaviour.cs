@@ -35,11 +35,13 @@ public class MonsterBehaviour : MonoBehaviourPun, IPunInstantiateMagicCallback, 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) {
         if(stream.IsWriting) {
             stream.SendNext(Data.position);
+            stream.SendNext(Data.health);
         }
         else if(stream.IsReading) {
             Vector2 prevPosittion = Data.position;
 
             Data.position = (Vector2)stream.ReceiveNext();
+            Data.health = (float)stream.ReceiveNext();
 
             if(isFirstNetworkRead) {
                 Data.isSynced = true;
