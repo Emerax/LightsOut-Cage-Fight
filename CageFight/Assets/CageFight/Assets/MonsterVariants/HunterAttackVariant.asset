@@ -10,18 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6ec28086b6dcf2646bf46e359caccf43, type: 3}
-  m_Name: SwarmAttackVariant
-  m_EditorClassIdentifier: 
-  identifier: 2
-  sprite: {fileID: 21300000, guid: b42cc80b7f0634d69b757bb0e74bd33f, type: 3}
-  count: 5
-  width: 0.5
-  height: 0.5
-  health: 3
-  enemyDetectionRange: 4
-  aboidanceDistance: 0.5
-  movementSpeed: 1.5
-  cost: 40
-  attackRange: 0.75
+  m_Name: HunterAttackVariant
+  m_EditorClassIdentifier: Assembly-CSharp::AttackController/AttackStats
+  identifier: 3
+  sprite: {fileID: 21300000, guid: ce31151d041df4328aa8ce1b993e7c2d, type: 3}
+  count: 1
+  width: 1
+  height: 1
+  health: 10
+  enemyDetectionRange: 1000
+  aboidanceDistance: 0
+  movementSpeed: 1.4
+  attackRange: 1
   attackCooldown: 2
-  attackDamage: 1
+  attackDamage: 8

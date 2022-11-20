@@ -171,7 +171,12 @@ public class Shop : MonoBehaviour {
                     monster.Data.position = centerPos + 0.4f * new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
                 }
                 GameObject go = monsterManager.SpawnMonster(monster);
-                go.GetComponent<MonsterBehaviour>().Died += (MonsterBehaviour _) => DestroyCage(cage);
+                go.GetComponent<MonsterBehaviour>().Died += (MonsterBehaviour _) => {
+                    cage.Monsters.Remove(monster);
+                    if(cage.Monsters.Count == 0) {
+                        DestroyCage(cage);
+                    }
+                };
             }
         }
     }

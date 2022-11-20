@@ -52,7 +52,7 @@ public class AttackController : IMonsterController {
         }
         else {
             Vector2 toTarget;
-            if(closestEnemyDistance < 5f) {
+            if(closestEnemyDistance < Data.EnemyDetectionRange) {
                 toTarget = closestEnemy.Data.position - monsterData.position;
             }
             else {
@@ -62,7 +62,7 @@ public class AttackController : IMonsterController {
             Vector2 aboidance = Vector2.zero;
             foreach(MonsterBehaviour friend in MonsterList.Instance.GetMonstersOfTeam(monsterData.Team)) {
                 float distanceToFriend = Vector2.Distance(Data.position, friend.Data.position);
-                aboidance += (Data.position - friend.Data.position) * Mathf.Clamp(1f - distanceToFriend, 0, 1);
+                aboidance += (Data.position - friend.Data.position) * Mathf.Clamp(Data.AboidanceDistance - distanceToFriend, 0, 1);
             }
             monsterData.position += (deltaTime * stats.movementSpeed * toTarget.normalized) + aboidance;
         }
