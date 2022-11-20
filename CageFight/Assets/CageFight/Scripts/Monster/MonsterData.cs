@@ -6,6 +6,7 @@ public class MonsterData {
 
     public int Team { get; private set; }
     public MonsterVariantID ID { get; private set; }
+    public Sprite Sprite { get; private set; }
     public float Width { get; private set; }
     public float Height { get; private set; }
     public float MaxHealth { get; private set; }
@@ -22,6 +23,7 @@ public class MonsterData {
         ID = id;
 
         MonsterVariant variant = monsterSettings.monsterVariants.First(v => v.identifier == ID);
+        Sprite = variant.sprite;
         Width = variant.width;
         Height = variant.height;
         MaxHealth = variant.health;

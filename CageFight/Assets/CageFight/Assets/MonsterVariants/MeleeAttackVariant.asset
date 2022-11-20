@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: MeleeAttackVariant
   m_EditorClassIdentifier: Assembly-CSharp::AttackController/AttackStats
   identifier: 0
+  sprite: {fileID: 21300000, guid: ce31151d041df4328aa8ce1b993e7c2d, type: 3}
+  count: 1
   width: 1
   height: 1
   health: 15

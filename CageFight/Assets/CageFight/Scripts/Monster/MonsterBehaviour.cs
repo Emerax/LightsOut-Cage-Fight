@@ -10,6 +10,8 @@ public class MonsterBehaviour : MonoBehaviourPun, IPunInstantiateMagicCallback, 
     [SerializeField]
     private GameObject visuals;
     [SerializeField]
+    private SpriteRenderer sprite;
+    [SerializeField]
     private MonsterSettings monsterSettings;
 
     private IMonsterController monsterController;
@@ -24,8 +26,10 @@ public class MonsterBehaviour : MonoBehaviourPun, IPunInstantiateMagicCallback, 
 
         visuals.transform.localScale = new Vector3(Data.Width, Data.Height, Data.Width);
         Vector3 position = visuals.transform.localPosition;
-        position.y = 0.5f * Data.Height;
+        position.y = 0f;
         visuals.transform.localPosition = position;
+
+        sprite.sprite = Data.Sprite;
     }
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) {
