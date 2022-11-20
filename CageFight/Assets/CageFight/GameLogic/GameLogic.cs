@@ -8,7 +8,7 @@ using UnityEngine;
 /// <summary>
 /// Top level logic for a game of Lights Out: Cage Figth (tm).
 /// </summary>
-public class GameLogic : MonoBehaviourPunCallbacks {
+public class GameLogic : MonoBehaviourPunCallbacks, IPunObservable {
     [SerializeField]
     private UI gameplaySceneUI;
     [SerializeField]
@@ -119,6 +119,15 @@ public class GameLogic : MonoBehaviourPunCallbacks {
         }
     }
 
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) {
+        if(stream.IsWriting) {
+            stream.SendNext(remainingTime);
+        }
+        else {
+            remainingTime = (float)stream.ReceiveNext();
+        }
+    }
+
     public override void OnConnectedToMaster() {
         PhotonNetwork.JoinRandomOrCreateRoom();
     }
@@ -150,6 +159,13 @@ public class GameLogic : MonoBehaviourPunCallbacks {
                 PhotonNetwork.CloseConnection(newPlayer);
                 return;
             }
+        }
+
+        if(state == GameState.PRE_PHASE) {
+            //Update number of non-ready players.
+            int readyPlayerCount = PhotonNetwork.PlayerList.Count(p => p.CustomProperties.TryGetValue(READY_KEY, out object ready) && (bool)ready);
+            int currentPlayerCount = PhotonNetwork.PlayerList.Length;
+            ui.SetReadyPlayersDisplay(readyPlayerCount, currentPlayerCount);
         }
 
         if(PhotonNetwork.IsMasterClient) {
