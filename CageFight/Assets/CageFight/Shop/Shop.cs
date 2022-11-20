@@ -46,7 +46,7 @@ public class Shop : MonoBehaviour {
 
     private void Awake() {
         for(int i = 0; i < spawnPoints.Count; i++) {
-            SpawnCage(i);
+            SpawnCage(spawnPoints[i]);
         }
 
         foreach(CageSlot slot in slots) {
@@ -57,8 +57,7 @@ public class Shop : MonoBehaviour {
         SetVisible(false);
     }
 
-    public void SpawnCage(int slot) {
-        Transform spawnPointTransform = spawnPoints[slot];
+    public void SpawnCage(Transform spawnPointTransform) {
         Cage cage = Instantiate(cagePrefab, spawnPointTransform);
         cage.transform.localPosition = Vector3.zero;
         cage.transform.localRotation = Quaternion.identity;
@@ -93,8 +92,9 @@ public class Shop : MonoBehaviour {
         switch(type) {
             case CageEventType.BOUGHT:
                 if(localPlayer.Money >= cage.Cost) {
-                    localPlayer.RemoveMoney(cage.Cost);
                     if(TryFindVacantSlot(out CageSlot slot)) {
+                        localPlayer.RemoveMoney(cage.Cost);
+                        SpawnCage(cage.transform.parent); // New (replacement) cage
                         AttachCageToSlot(cage, slot);
                         cage.OnBought();
                         boughtCages.Add(cage);
