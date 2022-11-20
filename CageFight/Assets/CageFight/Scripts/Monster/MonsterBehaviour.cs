@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class MonsterBehaviour : MonoBehaviourPun, IPunInstantiateMagicCallback, IPunObservable {
 
-    public Action Died;
+    public Action<MonsterBehaviour> Died;
     public MonsterData Data { get; private set; }
 
     [SerializeField]
@@ -76,7 +76,7 @@ public class MonsterBehaviour : MonoBehaviourPun, IPunInstantiateMagicCallback, 
     }
 
     public void OnDeath(IMonsterController _) {
-        Died?.Invoke();
+        Died?.Invoke(this);
         PhotonNetwork.Destroy(gameObject);
     }
 
@@ -88,5 +88,17 @@ public class MonsterBehaviour : MonoBehaviourPun, IPunInstantiateMagicCallback, 
         else {
             transform.position = Vector3.MoveTowards(transform.position, targetPosition, networkPositionDelta * Time.deltaTime * PhotonNetwork.SerializationRate);
         }
+    }
+
+    private void OnTriggerEnter(Collider other) {
+        if(!photonView.IsMine) {
+            return;
+        }
+
+        other.GetComponent<ArenaCenter>().Register(this);
+    }
+
+    private void OnTriggerExit(Collider other) {
+        other.GetComponent<ArenaCenter>().Deregister(this);
     }
 }

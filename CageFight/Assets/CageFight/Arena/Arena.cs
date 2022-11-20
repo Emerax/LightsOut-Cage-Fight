@@ -9,6 +9,7 @@ using UnityEngine;
 public class Arena : MonoBehaviourPunCallbacks {
 
     public Shop shop;
+    public ArenaCenter center;
 
     [SerializeField]
     private List<ArenaSegment> segments;

@@ -157,6 +157,7 @@ public class GameLogic : MonoBehaviourPunCallbacks, IPunObservable {
         LocalPlayer.ToggleReady(true);
         OnPlayerMoneyChanged(LocalPlayer.Money);
         arena.shop.SetLocalPlayer(LocalPlayer);
+        arena.center.SetLocalPlayer(LocalPlayer);
     }
 
     public override void OnPlayerEnteredRoom(Player newPlayer) {
@@ -282,6 +283,7 @@ public class GameLogic : MonoBehaviourPunCallbacks, IPunObservable {
                 break;
             case GameState.COMBAT_PHASE:
                 arena.shop.DespawnMonsters();
+                arena.center.SetActive(false);
                 //Cleanup ALL THE MONSTERS!
                 if(PhotonNetwork.IsMasterClient) {
                     arena.ResetSegmentOwnerships();
@@ -307,6 +309,7 @@ public class GameLogic : MonoBehaviourPunCallbacks, IPunObservable {
             case GameState.COMBAT_PHASE:
                 remainingTime = combatTime;
                 arena.shop.SpawnMonsters(monsterManager);
+                arena.center.SetActive(true);
                 break;
             case GameState.SHOP_PHASE:
                 remainingTime = shopTime;

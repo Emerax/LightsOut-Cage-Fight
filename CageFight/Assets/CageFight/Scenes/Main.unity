@@ -355,8 +355,16 @@ PrefabInstance:
     serializedVersion: 2
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 16134500948124100, guid: 181321211df1b5246ad3d6f14c472fe6, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 5100e3fed99b0834cafe19fcf9717172, type: 2}
     - target: {fileID: 1118292798739158780, guid: 181321211df1b5246ad3d6f14c472fe6, type: 3}
       propertyPath: sceneViewId
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1368625999360290978, guid: 181321211df1b5246ad3d6f14c472fe6, type: 3}
+      propertyPath: scoringDelay
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 1514846520955296952, guid: 181321211df1b5246ad3d6f14c472fe6, type: 3}

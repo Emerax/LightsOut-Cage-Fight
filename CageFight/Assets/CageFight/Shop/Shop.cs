@@ -148,7 +148,7 @@ public class Shop : MonoBehaviour {
             foreach(IMonsterController monster in cage.Monsters) {
                 monster.Data.position = new(cage.transform.position.x, cage.transform.position.z);
                 GameObject go = monsterManager.SpawnMonster(monster);
-                go.GetComponent<MonsterBehaviour>().Died += () => DestroyCage(cage);
+                go.GetComponent<MonsterBehaviour>().Died += (MonsterBehaviour _) => DestroyCage(cage);
             }
         }
     }
