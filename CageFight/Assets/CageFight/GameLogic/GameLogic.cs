@@ -26,6 +26,8 @@ public class GameLogic : MonoBehaviourPunCallbacks, IPunObservable {
     [SerializeField]
     private float combatTime = 5f;
     [SerializeField]
+    private int roundsPerGame = 5;
+    [SerializeField]
     private MonsterSettings monsterSettings;
     public GladiatorManager LocalPlayer { get; private set; }
 
@@ -51,6 +53,7 @@ public class GameLogic : MonoBehaviourPunCallbacks, IPunObservable {
     }
 
     private GameState state = GameState.PRE_PHASE;
+    private int currentRound;
 
     private void Awake() {
         arena = FindObjectOfType<Arena>();
@@ -143,6 +146,7 @@ public class GameLogic : MonoBehaviourPunCallbacks, IPunObservable {
             //First time setup goes here! This player should decide when the game starts.
             PhotonNetwork.EnableCloseConnection = true;
             PhotonNetwork.LocalPlayer.SetCustomProperties(new Hashtable() { { COLOR_KEY, ColorToVector3(playerColors[nextPlayerColorIndex++]) } });
+            ui.SetHostPanelDisplay();
         }
         else {
             //Yer a pleb!
@@ -226,7 +230,12 @@ public class GameLogic : MonoBehaviourPunCallbacks, IPunObservable {
         Instantiate(webVotingUI);
 #else
         ui = Instantiate(gameplaySceneUI);
+        ui.ResetAction += ResetGame;
 #endif
+    }
+
+    private void ResetGame() {
+        photonView.RPC(nameof(ResetGameRPC), RpcTarget.All);
     }
 
     private void StartGame() {
@@ -250,7 +259,16 @@ public class GameLogic : MonoBehaviourPunCallbacks, IPunObservable {
     }
 
     private void ChangeState(GameState gameState) {
-        photonView.RPC(nameof(ChangeStateRPC), RpcTarget.All, gameState);
+        if(!PhotonNetwork.IsMasterClient) {
+            return;
+        }
+
+        if(gameState is GameState.SHOP_PHASE && currentRound >= roundsPerGame) {
+            photonView.RPC(nameof(ChangeStateRPC), RpcTarget.All, GameState.END_PHASE);
+        }
+        else {
+            photonView.RPC(nameof(ChangeStateRPC), RpcTarget.All, gameState);
+        }
     }
 
     [PunRPC]
@@ -264,6 +282,9 @@ public class GameLogic : MonoBehaviourPunCallbacks, IPunObservable {
                 break;
             case GameState.COMBAT_PHASE:
                 //Cleanup ALL THE MONSTERS!
+                if(PhotonNetwork.IsMasterClient) {
+                    arena.ResetSegmentOwnerships();
+                }
                 break;
             case GameState.SHOP_PHASE:
                 //Hide away shops, re-spawn monsters.
@@ -287,6 +308,7 @@ public class GameLogic : MonoBehaviourPunCallbacks, IPunObservable {
                 break;
             case GameState.SHOP_PHASE:
                 remainingTime = shopTime;
+                currentRound++;
                 if(PhotonNetwork.IsMasterClient) {
                     arena.AssignSegmentsToPlayers(players);
                 }
@@ -321,5 +343,12 @@ public class GameLogic : MonoBehaviourPunCallbacks, IPunObservable {
     [PunRPC]
     private void DebugSpawnMonstersRPC() {
         DebugSpawnMonsters();
+    }
+
+    [PunRPC]
+    private void ResetGameRPC() {
+        //TODO: Properly reset everything here.
+        currentRound = 0;
+        ChangeState(GameState.SHOP_PHASE);
     }
 }
