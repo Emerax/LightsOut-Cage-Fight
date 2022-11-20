@@ -48,6 +48,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   visuals: {fileID: 4512628029646615694}
+  monsterSettings: {fileID: 11400000, guid: 0744444c0727e1f4f8da65ddc79c78f6, type: 2}
 --- !u!114 &6229981290231780560
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -145,6 +146,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1105706951899712141}
   - component: {fileID: 3523985502100239003}
+  - component: {fileID: 5737094780961910524}
   m_Layer: 0
   m_Name: soldier_awake (1)
   m_TagString: Untagged
@@ -219,6 +221,19 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!65 &5737094780961910524
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7170810439034637463}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 6.77, y: 7.51, z: 0.2}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &2918947477318951081
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -235,22 +250,6 @@ PrefabInstance:
       propertyPath: Monster
       value: 
       objectReference: {fileID: 7663740119790835815}
-    - target: {fileID: 4730119313236793240, guid: dac4133074bda4f10b998e796fd11260, type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 2520.3242
-      objectReference: {fileID: 0}
-    - target: {fileID: 4730119313236793240, guid: dac4133074bda4f10b998e796fd11260, type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 473.5102
-      objectReference: {fileID: 0}
-    - target: {fileID: 4730119313236793240, guid: dac4133074bda4f10b998e796fd11260, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: -0.01
-      objectReference: {fileID: 0}
-    - target: {fileID: 4730119313236793240, guid: dac4133074bda4f10b998e796fd11260, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 2.56
-      objectReference: {fileID: 0}
     - target: {fileID: 8443668218701548851, guid: dac4133074bda4f10b998e796fd11260, type: 3}
       propertyPath: m_RootOrder
       value: -1
@@ -261,7 +260,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8443668218701548851, guid: dac4133074bda4f10b998e796fd11260, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.86
+      value: 3.29
       objectReference: {fileID: 0}
     - target: {fileID: 8443668218701548851, guid: dac4133074bda4f10b998e796fd11260, type: 3}
       propertyPath: m_LocalPosition.z
@@ -298,6 +297,23 @@ PrefabInstance:
     m_RemovedComponents: []
     m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: dac4133074bda4f10b998e796fd11260, type: 3}
+--- !u!1 &3939984474922624100 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2175111362954347725, guid: dac4133074bda4f10b998e796fd11260, type: 3}
+  m_PrefabInstance: {fileID: 2918947477318951081}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &6592786226633494906
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3939984474922624100}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 70347982bd8c943cabd94db6a40fe4f2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &6750826304958393754 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8443668218701548851, guid: dac4133074bda4f10b998e796fd11260, type: 3}
