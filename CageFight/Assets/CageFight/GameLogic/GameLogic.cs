@@ -22,6 +22,10 @@ public class GameLogic : MonoBehaviourPunCallbacks {
     [SerializeField]
     private int startingMoney;
     [SerializeField]
+    private float shopTime = 5f;
+    [SerializeField]
+    private float combatTime = 5f;
+    [SerializeField]
     private MonsterSettings monsterSettings;
     public GladiatorManager LocalPlayer { get; private set; }
 
@@ -36,8 +40,9 @@ public class GameLogic : MonoBehaviourPunCallbacks {
     private CameraController cameraController;
     private int nextPlayerColorIndex = 0;
     private List<Player> players;
+    private float remainingTime = 5f;
 
-    private enum GameState {
+    public enum GameState {
         PRE_PHASE = 0,
         COMBAT_PHASE = 1,
         SHOP_PHASE = 2,
@@ -71,13 +76,23 @@ public class GameLogic : MonoBehaviourPunCallbacks {
             case GameState.DEBUG_COMBAT_PHASE:
             case GameState.COMBAT_PHASE:
                 monsterManager.Tick(Time.deltaTime);
+                CheckTimer(GameState.SHOP_PHASE);
                 break;
             case GameState.SHOP_PHASE:
+                CheckTimer(GameState.COMBAT_PHASE);
                 break;
             case GameState.END_PHASE:
                 break;
             default:
                 break;
+        }
+    }
+
+    private void CheckTimer(GameState timeoutState) {
+        remainingTime -= Time.deltaTime;
+        ui.SetTimerTextDisplay(remainingTime);
+        if(remainingTime < 0f) {
+            ChangeState(timeoutState);
         }
     }
 
@@ -146,12 +161,22 @@ public class GameLogic : MonoBehaviourPunCallbacks {
         switch(state) {
             case GameState.PRE_PHASE:
                 //Read READY here to update UI with number of ready players. Display in UI?
+                if(changedProps.TryGetValue(READY_KEY, out object _)) {
+                    int readyPlayerCount = PhotonNetwork.PlayerList.Count(p => p.CustomProperties.TryGetValue(READY_KEY, out object ready) && (bool)ready);
+                    int currentPlayerCount = PhotonNetwork.PlayerList.Length;
+                    ui.SetReadyPlayersDisplay(readyPlayerCount, currentPlayerCount);
+                }
                 break;
             case GameState.SHOP_PHASE:
                 Debug.Log($"State is now {state}");
                 if(changedProps.TryGetValue(READY_KEY, out object _)) {
                     if(AllPlayersAreReady()) {
                         ChangeState(GameState.COMBAT_PHASE);
+                    }
+                    else {
+                        int readyPlayerCount = players.Count(p => p.CustomProperties.TryGetValue(READY_KEY, out object ready) && (bool)ready);
+                        int currentPlayerCount = players.Count;
+                        ui.SetReadyPlayersDisplay(readyPlayerCount, currentPlayerCount);
                     }
                 }
                 break;
@@ -233,13 +258,16 @@ public class GameLogic : MonoBehaviourPunCallbacks {
         }
 
         state = newState;
+        ui.OnEnterState(state);
         Debug.Log($"Start {state}");
 
         //Handle entering new state.
         switch(state) {
             case GameState.COMBAT_PHASE:
+                remainingTime = combatTime;
                 break;
             case GameState.SHOP_PHASE:
+                remainingTime = shopTime;
                 if(PhotonNetwork.IsMasterClient) {
                     arena.AssignSegmentsToPlayers(players);
                 }
