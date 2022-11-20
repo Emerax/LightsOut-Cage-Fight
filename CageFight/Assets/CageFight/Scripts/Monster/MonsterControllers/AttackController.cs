@@ -58,7 +58,13 @@ public class AttackController : IMonsterController {
             else {
                 toTarget = arenaData.centerPosition - monsterData.position;
             }
-            monsterData.position += deltaTime * stats.movementSpeed * toTarget.normalized;
+
+            Vector2 aboidance = Vector2.zero;
+            foreach(MonsterBehaviour friend in MonsterList.Instance.GetMonstersOfTeam(monsterData.Team)) {
+                float distanceToFriend = Vector2.Distance(Data.position, friend.Data.position);
+                aboidance += (Data.position - friend.Data.position) * Mathf.Clamp(1f - distanceToFriend, 0, 1);
+            }
+            monsterData.position += (deltaTime * stats.movementSpeed * toTarget.normalized) + aboidance;
         }
 
         if(isCooldownLeft) {

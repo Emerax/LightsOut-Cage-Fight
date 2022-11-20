@@ -101,6 +101,8 @@ public class MonsterBehaviour : MonoBehaviourPun, IPunInstantiateMagicCallback, 
     }
 
     private void OnTriggerExit(Collider other) {
-        other.GetComponent<ArenaCenter>().Deregister(this);
+        if(!photonView.IsMine) {
+            other.GetComponent<ArenaCenter>().Deregister(this);
+        }
     }
 }
