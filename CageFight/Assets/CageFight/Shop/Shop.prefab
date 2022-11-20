@@ -324,7 +324,7 @@ Transform:
   - {fileID: 5263011832508483273}
   - {fileID: 8333077242896568680}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7455696754161629791
 MonoBehaviour:
@@ -357,6 +357,7 @@ MonoBehaviour:
   - {fileID: 8090193587017016410}
   cagePrefab: {fileID: 246526402443464228, guid: d75cda3fbcfa0224a8307ec9ba58e27f, type: 3}
   doneButton: {fileID: 7530640888661010986}
+  cameraHolder: {fileID: 8333077242896568680}
 --- !u!1 &3193853831993984714
 GameObject:
   m_ObjectHideFlags: 0

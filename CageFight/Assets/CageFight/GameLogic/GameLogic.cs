@@ -54,6 +54,7 @@ public class GameLogic : MonoBehaviourPunCallbacks, IPunObservable {
 
     private void Awake() {
         arena = FindObjectOfType<Arena>();
+        arena.ShopRelocated += OnShopRelocated;
         cameraController = FindObjectOfType<CameraController>();
 #if UNITY_ANDROID || UNITY_IOS || UNITY_WEBGL
         //These clients should never be master.
@@ -66,6 +67,10 @@ public class GameLogic : MonoBehaviourPunCallbacks, IPunObservable {
 
     private void Start() {
         monsterManager = new MonsterManager();
+    }
+
+    private void OnDestroy() {
+        arena.ShopRelocated -= OnShopRelocated;
     }
 
     private void Update() {
@@ -147,9 +152,7 @@ public class GameLogic : MonoBehaviourPunCallbacks, IPunObservable {
         LocalPlayer.MoneyChangeAction += OnPlayerMoneyChanged;
         LocalPlayer.ToggleReady(true);
         OnPlayerMoneyChanged(LocalPlayer.Money);
-        foreach(Shop shop in FindObjectsOfType<Shop>()) {
-            shop.SetLocalPlayer(LocalPlayer);
-        }
+        arena.shop.SetLocalPlayer(LocalPlayer);
     }
 
     public override void OnPlayerEnteredRoom(Player newPlayer) {
@@ -287,8 +290,7 @@ public class GameLogic : MonoBehaviourPunCallbacks, IPunObservable {
                 if(PhotonNetwork.IsMasterClient) {
                     arena.AssignSegmentsToPlayers(players);
                 }
-
-                cameraController.SetShopTarget(arena.OwnSegment);
+                arena.shop.OnNewShopPhase();
                 break;
             case GameState.END_PHASE:
                 break;
@@ -297,6 +299,12 @@ public class GameLogic : MonoBehaviourPunCallbacks, IPunObservable {
                 break;
             default:
                 break;
+        }
+    }
+
+    public void OnShopRelocated() {
+        if(state == GameState.SHOP_PHASE) {
+            cameraController.SetShopTarget(arena.shop);
         }
     }
 

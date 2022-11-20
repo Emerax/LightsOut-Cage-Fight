@@ -67,10 +67,9 @@ public class CameraController : MonoBehaviour {
         cameraObject.transform.LookAt(arenaTransform);
     }
 
-    public void SetShopTarget(ArenaSegment segment) {
+    public void SetShopTarget(Shop shop) {
         viewShop = true;
-        shopSegment = segment;
-        Transform target = shopSegment.CameraHolderTransform;
+        Transform target = shop.CameraHolderTransform;
         preShopPosition = transform.position;
         preShopRotation = cameraObject.transform.rotation;
         StartCoroutine(DoLerpToTarget(transform.position, target.position, cameraObject.transform.rotation, target.rotation, shopLerpTime));

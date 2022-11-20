@@ -14,6 +14,11 @@ public class Shop : MonoBehaviour {
     [SerializeField]
     private DoneButton doneButton;
 
+    [SerializeField]
+    private Transform cameraHolder;
+
+    public Transform CameraHolderTransform { get => cameraHolder; }
+
     private readonly Dictionary<CageSlot, Cage> cageSlots = new();
     private Cage currentCage;
     private GladiatorManager localPlayer;
@@ -28,7 +33,9 @@ public class Shop : MonoBehaviour {
     private void Awake() {
         for(int i = 0; i < spawnPoints.Count; i++) {
             Transform spawnPointTransform = spawnPoints[i];
-            Cage cage = Instantiate(cagePrefab, spawnPointTransform.position, spawnPointTransform.rotation);
+            Cage cage = Instantiate(cagePrefab, spawnPointTransform);
+            cage.transform.localPosition = Vector3.zero;
+            cage.transform.localRotation = Quaternion.identity;
             cage.Init(i);
             cage.CageEventAction += OnCageEvent;
         }
@@ -38,6 +45,15 @@ public class Shop : MonoBehaviour {
         }
 
         doneButton.ToggleReadyAction += OnReadyToggle;
+        SetVisible(false);
+    }
+
+    public void SetVisible(bool isVisible) {
+        gameObject.SetActive(isVisible);
+    }
+
+    public void OnNewShopPhase() {
+        doneButton.ResetButton();
     }
 
     private void Update() {
