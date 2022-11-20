@@ -1,9 +1,8 @@
 using Photon.Pun;
-using System;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = nameof(MonsterSettings), menuName = "Settings/" + nameof(MonsterSettings), order = 1)]
-public class MonsterSettings: ScriptableObject {
+public class MonsterSettings : ScriptableObject {
 
     public MonsterVariant[] monsterVariants;
 }
@@ -13,6 +12,9 @@ public enum MonsterVariantID {
     Melee = 0,
     Ranged = 1,
     Swarm = 2,
+    Hunter = 3,
+    Giant = 4,
+    Pacifist = 5,
 }
 
 public abstract class MonsterVariant : ScriptableObject {
@@ -22,7 +24,10 @@ public abstract class MonsterVariant : ScriptableObject {
     public float width = 1f;
     public float height = 1f;
     public float health = 10f;
+    public float enemyDetectionRange = 5f;
+    public float aboidanceDistance = 1f;
     public float movementSpeed = 1f;
+    public int cost = 60;
 
     public abstract IMonsterController[] CreateControllers(MonsterSettings monsterSettings, ArenaData arenaData, Vector2 position);
 

@@ -10,6 +10,8 @@ public class MonsterData {
     public float Width { get; private set; }
     public float Height { get; private set; }
     public float MaxHealth { get; private set; }
+    public float EnemyDetectionRange { get; private set; }
+    public float AboidanceDistance { get; private set; }
 
     public float health;
     public Vector2 position;
@@ -27,6 +29,8 @@ public class MonsterData {
         Width = variant.width;
         Height = variant.height;
         MaxHealth = variant.health;
+        EnemyDetectionRange = variant.enemyDetectionRange;
+        AboidanceDistance = variant.aboidanceDistance;
 
         this.health = health;
         this.position = position;
