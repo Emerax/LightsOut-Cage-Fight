@@ -58,6 +58,7 @@ public class GameLogic : MonoBehaviourPunCallbacks, IPunObservable {
     private void Awake() {
         arena = FindObjectOfType<Arena>();
         arena.ShopRelocated += OnShopRelocated;
+        arena.shop.SetVisible(false);
         cameraController = FindObjectOfType<CameraController>();
 #if UNITY_ANDROID || UNITY_IOS || UNITY_WEBGL
         //These clients should never be master.
@@ -292,6 +293,7 @@ public class GameLogic : MonoBehaviourPunCallbacks, IPunObservable {
             case GameState.SHOP_PHASE:
                 //Hide away shops, re-spawn monsters.
                 cameraController.SetArenaTarget();
+                arena.shop.SetVisible(false);
                 break;
             case GameState.END_PHASE:
                 //Reset everything for a new game?
@@ -317,6 +319,7 @@ public class GameLogic : MonoBehaviourPunCallbacks, IPunObservable {
                 if(PhotonNetwork.IsMasterClient) {
                     arena.AssignSegmentsToPlayers(players);
                 }
+                arena.shop.SetVisible(true);
                 arena.shop.OnNewShopPhase();
                 break;
             case GameState.END_PHASE:

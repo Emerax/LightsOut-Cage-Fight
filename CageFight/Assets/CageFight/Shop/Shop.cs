@@ -26,6 +26,11 @@ public class Shop : MonoBehaviour {
     [SerializeField]
     private MonsterSettings monsterSettings;
 
+    [SerializeField]
+    private GameObject shopParent;
+    [SerializeField]
+    private GameObject slotsParent;
+
     private readonly Dictionary<CageSlot, Cage> cageSlots = new();
     private readonly List<Cage> boughtCages = new();
     private Cage currentCage;
@@ -73,6 +78,11 @@ public class Shop : MonoBehaviour {
 
     public void SetLocalPlayer(GladiatorManager gladiatorManager) {
         localPlayer = gladiatorManager;
+    }
+
+    public void ToggleVisibility(bool visible) {
+        shopParent.SetActive(visible);
+        slotsParent.SetActive(visible);
     }
 
     private void OnCageEvent(CageEventType type, Cage cage) {
