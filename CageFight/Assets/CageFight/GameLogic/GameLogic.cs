@@ -10,6 +10,8 @@ using UnityEngine;
 /// </summary>
 public class GameLogic : MonoBehaviourPunCallbacks, IPunObservable {
     [SerializeField]
+    private int allowance;
+    [SerializeField]
     private UI gameplaySceneUI;
     [SerializeField]
     private string androidVotingUI;
@@ -30,6 +32,7 @@ public class GameLogic : MonoBehaviourPunCallbacks, IPunObservable {
     [SerializeField]
     private MonsterSettings monsterSettings;
     public GladiatorManager LocalPlayer { get; private set; }
+
 
     //Player property keys
     public const string SCORE_KEY = "SCORE";
@@ -315,6 +318,7 @@ public class GameLogic : MonoBehaviourPunCallbacks, IPunObservable {
                 LocalPlayer.ToggleReady(false);
                 break;
             case GameState.SHOP_PHASE:
+                LocalPlayer.Money+=allowance;
                 remainingTime = shopTime;
                 currentRound++;
                 if(PhotonNetwork.IsMasterClient) {

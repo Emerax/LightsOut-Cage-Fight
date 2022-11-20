@@ -13,7 +13,7 @@ public class GladiatorManager {
 
     public int Money {
         get => money;
-        private set {
+             set {
             money = value;
             MoneyChangeAction?.Invoke(money);
         }
