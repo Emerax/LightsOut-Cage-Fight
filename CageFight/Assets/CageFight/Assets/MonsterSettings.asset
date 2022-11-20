@@ -15,3 +15,4 @@ MonoBehaviour:
   monsterVariants:
   - {fileID: 11400000, guid: 3a0a32262261174429ea48c9c3d9a212, type: 2}
   - {fileID: 11400000, guid: b6cf3cf26dab03149bf94503379a03c6, type: 2}
+  - {fileID: 11400000, guid: e0b7f94914a023c4687da778381370e3, type: 2}

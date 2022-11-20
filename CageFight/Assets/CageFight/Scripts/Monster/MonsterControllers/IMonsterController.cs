@@ -11,7 +11,7 @@ public interface IMonsterController {
     public void Tick(float deltaTime);
     public void ReceiveDamage(float damage);
 
-    public static IMonsterController Create(MonsterSettings monsterSettings, MonsterVariantID id, ArenaData arenaData, Vector2 startPosition) {
-        return monsterSettings.monsterVariants.First(v => v.identifier == id).CreateController(monsterSettings, arenaData, startPosition);
+    public static IMonsterController[] Create(MonsterSettings monsterSettings, MonsterVariantID id, ArenaData arenaData, Vector2 startPosition) {
+        return monsterSettings.monsterVariants.First(v => v.identifier == id).CreateControllers(monsterSettings, arenaData, startPosition);
     }
 }

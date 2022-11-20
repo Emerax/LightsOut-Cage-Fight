@@ -41,12 +41,7 @@ public class Shop : MonoBehaviour {
 
     private void Awake() {
         for(int i = 0; i < spawnPoints.Count; i++) {
-            Transform spawnPointTransform = spawnPoints[i];
-            Cage cage = Instantiate(cagePrefab, spawnPointTransform);
-            cage.transform.localPosition = Vector3.zero;
-            cage.transform.localRotation = Quaternion.identity;
-            cage.Init(monsterSettings, arenaData);
-            cage.CageEventAction += OnCageEvent;
+            SpawnCage(i);
         }
 
         foreach(CageSlot slot in slots) {
@@ -55,6 +50,15 @@ public class Shop : MonoBehaviour {
 
         doneButton.ToggleReadyAction += OnReadyToggle;
         SetVisible(false);
+    }
+
+    public void SpawnCage(int slot) {
+        Transform spawnPointTransform = spawnPoints[slot];
+        Cage cage = Instantiate(cagePrefab, spawnPointTransform);
+        cage.transform.localPosition = Vector3.zero;
+        cage.transform.localRotation = Quaternion.identity;
+        cage.Init(monsterSettings, arenaData);
+        cage.CageEventAction += OnCageEvent;
     }
 
     public void SetVisible(bool isVisible) {
@@ -145,8 +149,17 @@ public class Shop : MonoBehaviour {
 
     public void SpawnMonsters(MonsterManager monsterManager) {
         foreach(Cage cage in boughtCages) {
-            foreach(IMonsterController monster in cage.Monsters) {
-                monster.Data.position = new(cage.transform.position.x, cage.transform.position.z);
+            int monsterCount = cage.Monsters.Count;
+            for(int i = 0; i < monsterCount; ++i) {
+                IMonsterController monster = cage.Monsters[i];
+                Vector2 centerPos = new(cage.transform.position.x, cage.transform.position.z);
+                if (monsterCount == 1) {
+                    monster.Data.position = centerPos;
+                }
+                else {
+                    float angle = i / (float)monsterCount * 2 * Mathf.PI;
+                    monster.Data.position = centerPos + 0.4f * new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
+                }
                 GameObject go = monsterManager.SpawnMonster(monster);
                 go.GetComponent<MonsterBehaviour>().Died += (MonsterBehaviour _) => DestroyCage(cage);
             }
@@ -163,8 +176,8 @@ public class Shop : MonoBehaviour {
         float angle = team * 0.25f * Mathf.PI;
         Vector2 axis = new(Mathf.Cos(angle), Mathf.Sin(angle));
 
-        monsterManager.SpawnMonster(IMonsterController.Create(monsterSettings, MonsterVariantID.Melee, arenaData, 10f * axis));
-        monsterManager.SpawnMonster(IMonsterController.Create(monsterSettings, MonsterVariantID.Ranged, arenaData, -10f * axis));
+        monsterManager.SpawnMonster(IMonsterController.Create(monsterSettings, MonsterVariantID.Melee, arenaData, 10f * axis)[0]);
+        monsterManager.SpawnMonster(IMonsterController.Create(monsterSettings, MonsterVariantID.Ranged, arenaData, -10f * axis)[0]);
     }
 
     private void DestroyCage(Cage cage) {
