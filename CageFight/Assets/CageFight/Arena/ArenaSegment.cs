@@ -11,9 +11,7 @@ public class ArenaSegment : MonoBehaviour {
     [SerializeField]
     private TMP_Text scoreText;
     [SerializeField]
-    private Transform cameraHolder;
-
-    public Transform CameraHolderTransform { get => cameraHolder; }
+    private Transform shopAnchor;
 
     public Player Owner { get; private set; }
 
@@ -32,6 +30,12 @@ public class ArenaSegment : MonoBehaviour {
         Owner = null;
         bannerRenderer.material.color = color;
         scoreText.text = "";
+    }
+
+    public void PlaceShop(Shop shop) {
+        shop.transform.parent = shopAnchor;
+        shop.transform.localPosition = Vector3.zero;
+        shop.transform.localRotation = Quaternion.identity;
     }
 
     public void OnScoreUpdated(Player targetPlayer, int score) {
