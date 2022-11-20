@@ -9,6 +9,8 @@ public class MonsterBehaviour : MonoBehaviourPun, IPunInstantiateMagicCallback, 
 
     [SerializeField]
     private GameObject visuals;
+    [SerializeField]
+    private MonsterSettings monsterSettings;
 
     private IMonsterController monsterController;
 
@@ -16,7 +18,7 @@ public class MonsterBehaviour : MonoBehaviourPun, IPunInstantiateMagicCallback, 
     private float networkPositionDelta = 0f;
 
     public void OnPhotonInstantiate(PhotonMessageInfo info) {
-        Data = MonsterData.FromObjectArray(info.photonView.InstantiationData);
+        Data = MonsterData.FromObjectArray(monsterSettings, info.photonView.InstantiationData);
         Debug.Log($"Instantiated Monster on team {Data.Team}");
         MonsterList.Instance.AddMonster(this);
 

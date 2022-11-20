@@ -7,7 +7,7 @@ public class AttackVariant : MonsterVariant {
     public float attackCooldown = 2f;
     public float attackDamage = 5f;
 
-    public override IMonsterController CreateController(ArenaData arenaData, Vector2 startPosition) {
-        return new AttackController(arenaData, CreateMonsterData(startPosition), this);
+    public override IMonsterController CreateController(MonsterSettings monsterSettings, ArenaData arenaData, Vector2 position) {
+        return new AttackController(arenaData, CreateMonsterData(monsterSettings, position), this);
     }
 }

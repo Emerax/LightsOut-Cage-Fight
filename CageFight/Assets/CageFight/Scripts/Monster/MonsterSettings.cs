@@ -21,10 +21,10 @@ public abstract class MonsterVariant : ScriptableObject {
     public float health = 10f;
     public float movementSpeed = 1f;
 
-    public abstract IMonsterController CreateController(ArenaData arenaData, Vector2 startPosition);
+    public abstract IMonsterController CreateController(MonsterSettings monsterSettings, ArenaData arenaData, Vector2 position);
 
-    protected MonsterData CreateMonsterData(Vector2 startPosition) {
+    protected MonsterData CreateMonsterData(MonsterSettings monsterSettings, Vector2 position) {
         int team = PhotonNetwork.LocalPlayer.ActorNumber;
-        return new(team, identifier, width, height, health, health, startPosition, isSynced: true);
+        return new(monsterSettings, team, identifier, health, position, isSynced: true);
     }
 }

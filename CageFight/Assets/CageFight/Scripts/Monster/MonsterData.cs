@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using UnityEngine;
 
 public class MonsterData {
@@ -16,14 +17,17 @@ public class MonsterData {
 
     public Action<float> OnDamageReceived;
 
-    public MonsterData(int team, MonsterVariantID id, float width, float height, float maxHealth, float health, Vector2 startPosition, bool isSynced) {
+    public MonsterData(MonsterSettings monsterSettings, int team, MonsterVariantID id, float health, Vector2 position, bool isSynced) {
         Team = team;
         ID = id;
-        Width = width;
-        Height = height;
-        MaxHealth = maxHealth;
+
+        MonsterVariant variant = monsterSettings.monsterVariants.First(v => v.identifier == ID);
+        Width = variant.width;
+        Height = variant.height;
+        MaxHealth = variant.health;
+
         this.health = health;
-        position = startPosition;
+        this.position = position;
         this.isSynced = isSynced;
     }
 
@@ -31,22 +35,16 @@ public class MonsterData {
         return new object[] {
             Team,
             ID,
-            Width,
-            Height,
-            MaxHealth,
             health,
             position
         };
     }
 
-    public static MonsterData FromObjectArray(object[] objects) {
+    public static MonsterData FromObjectArray(MonsterSettings monsterSettings, object[] objects) {
         int team = (int)objects[0];
         MonsterVariantID id = (MonsterVariantID)objects[1];
-        float width = (float)objects[2];
-        float height = (float)objects[3];
-        float maxHealth = (float)objects[4];
-        float health = (float)objects[5];
-        Vector2 position = (Vector2)objects[6];
-        return new MonsterData(team, id, width, height, maxHealth, health, position, isSynced: false);
+        float health = (float)objects[2];
+        Vector2 position = (Vector2)objects[3];
+        return new MonsterData(monsterSettings, team, id, health, position, isSynced: false);
     }
 }
