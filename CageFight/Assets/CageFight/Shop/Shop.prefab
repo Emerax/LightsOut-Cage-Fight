@@ -358,6 +358,7 @@ MonoBehaviour:
   cagePrefab: {fileID: 246526402443464228, guid: d75cda3fbcfa0224a8307ec9ba58e27f, type: 3}
   doneButton: {fileID: 7530640888661010986}
   cameraHolder: {fileID: 8333077242896568680}
+  monsterSettings: {fileID: 11400000, guid: 0744444c0727e1f4f8da65ddc79c78f6, type: 2}
 --- !u!1 &3193853831993984714
 GameObject:
   m_ObjectHideFlags: 0

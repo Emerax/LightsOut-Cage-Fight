@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -19,7 +20,14 @@ public class Shop : MonoBehaviour {
 
     public Transform CameraHolderTransform { get => cameraHolder; }
 
+    [SerializeField]
+    private ArenaData arenaData;
+
+    [SerializeField]
+    private MonsterSettings monsterSettings;
+
     private readonly Dictionary<CageSlot, Cage> cageSlots = new();
+    private readonly List<Cage> boughtCages = new();
     private Cage currentCage;
     private GladiatorManager localPlayer;
 
@@ -27,7 +35,8 @@ public class Shop : MonoBehaviour {
         BOUGHT,
         SOLD,
         BEGIN_CLICK,
-        END_CLICK
+        END_CLICK,
+        DESTROYED,
     }
 
     private void Awake() {
@@ -36,7 +45,7 @@ public class Shop : MonoBehaviour {
             Cage cage = Instantiate(cagePrefab, spawnPointTransform);
             cage.transform.localPosition = Vector3.zero;
             cage.transform.localRotation = Quaternion.identity;
-            cage.Init(i);
+            cage.Init(monsterSettings, arenaData);
             cage.CageEventAction += OnCageEvent;
         }
 
@@ -74,6 +83,7 @@ public class Shop : MonoBehaviour {
                     if(TryFindVacantSlot(out CageSlot slot)) {
                         AttachCageToSlot(cage, slot);
                         cage.OnBought();
+                        boughtCages.Add(cage);
                     }
                 }
                 break;
@@ -84,6 +94,9 @@ public class Shop : MonoBehaviour {
                 break;
             case CageEventType.END_CLICK:
                 currentCage = null;
+                break;
+            case CageEventType.DESTROYED:
+                boughtCages.Remove(cage);
                 break;
             default:
                 break;
@@ -128,5 +141,33 @@ public class Shop : MonoBehaviour {
                 }
             }
         }
+    }
+
+    public void SpawnMonsters(MonsterManager monsterManager) {
+        foreach(Cage cage in boughtCages) {
+            cage.Monster.Data.position = new(cage.transform.position.x, cage.transform.position.z);
+            GameObject go = monsterManager.SpawnMonster(cage.Monster);
+            go.GetComponent<MonsterBehaviour>().Died += () => DestroyCage(cage);
+        }
+    }
+
+    public void DespawnMonsters() {
+        foreach(MonsterBehaviour monster in MonsterList.Instance.GetMonstersOfTeam(localPlayer.Team)) {
+            PhotonNetwork.Destroy(monster.gameObject);
+        }
+    }
+
+    public void DebugSpawnMonsters(MonsterManager monsterManager, int team) {
+        float angle = team * 0.25f * Mathf.PI;
+        Vector2 axis = new(Mathf.Cos(angle), Mathf.Sin(angle));
+
+        monsterManager.SpawnMonster(IMonsterController.Create(monsterSettings, MonsterVariantID.Melee, arenaData, 10f * axis));
+        monsterManager.SpawnMonster(IMonsterController.Create(monsterSettings, MonsterVariantID.Ranged, arenaData, -10f * axis));
+    }
+
+    private void DestroyCage(Cage cage) {
+        ClearCageFromSlot(cage);
+        boughtCages.Remove(cage);
+        Destroy(cage.gameObject);
     }
 }

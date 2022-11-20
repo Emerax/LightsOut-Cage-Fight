@@ -6,8 +6,10 @@ using static Shop;
 public class Cage : MonoBehaviour {
     public Action<CageEventType, Cage> CageEventAction;
     public int Cost { get => cost; private set => cost = value; }
+    public IMonsterController Monster { get; private set; }
 
-    private List<IMonsterController> monsters;
+    private MonsterSettings monsterSettings;
+    private ArenaData arenaData;
     private bool bought = false;
     private int cost = 60;
 
@@ -26,10 +28,17 @@ public class Cage : MonoBehaviour {
         }
     }
 
-    public void Init(int slot) {
+    public void Init(MonsterSettings monsterSettings, ArenaData arenaData) {
+        this.monsterSettings = monsterSettings;
+        this.arenaData = arenaData;
     }
 
     public void OnBought() {
         bought = true;
+        Monster = IMonsterController.Create(monsterSettings, MonsterVariantID.Melee, arenaData, new(transform.position.x, transform.position.z));
+    }
+
+    private void OnDestroy() {
+        CageEventAction?.Invoke(CageEventType.DESTROYED, this);
     }
 }

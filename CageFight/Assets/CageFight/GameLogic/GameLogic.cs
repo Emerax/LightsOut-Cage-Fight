@@ -263,7 +263,7 @@ public class GameLogic : MonoBehaviourPunCallbacks, IPunObservable {
                 LocalPlayer.ToggleReady(false);
                 break;
             case GameState.COMBAT_PHASE:
-                //Cleanup ALL THE MONSTERS!
+                arena.shop.DespawnMonsters();
                 break;
             case GameState.SHOP_PHASE:
                 //Hide away shops, re-spawn monsters.
@@ -284,6 +284,7 @@ public class GameLogic : MonoBehaviourPunCallbacks, IPunObservable {
         switch(state) {
             case GameState.COMBAT_PHASE:
                 remainingTime = combatTime;
+                arena.shop.SpawnMonsters(monsterManager);
                 break;
             case GameState.SHOP_PHASE:
                 remainingTime = shopTime;
@@ -309,13 +310,7 @@ public class GameLogic : MonoBehaviourPunCallbacks, IPunObservable {
     }
 
     private void DebugSpawnMonsters() {
-        ArenaData arenaData = new(Vector2.zero);
-        int team = PhotonNetwork.LocalPlayer.ActorNumber;
-        float angle = team * 0.25f * Mathf.PI;
-        Vector2 axis = new(Mathf.Cos(angle), Mathf.Sin(angle));
-
-        monsterManager.SpawnMonster(IMonsterController.Create(monsterSettings, MonsterVariantID.Melee, arenaData, 10f * axis));
-        monsterManager.SpawnMonster(IMonsterController.Create(monsterSettings, MonsterVariantID.Ranged, arenaData, -10f * axis));
+        arena.shop.DebugSpawnMonsters(monsterManager, LocalPlayer.Team);
     }
 
     [PunRPC]

@@ -5,6 +5,7 @@ using System;
 /// </summary>
 public class GladiatorManager {
     public bool IsMe { get => player.IsLocal; }
+    public int Team { get => player.ActorNumber; }
 
     public int Score {
         get => (int)player.CustomProperties[GameLogic.SCORE_KEY];

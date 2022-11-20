@@ -1,8 +1,10 @@
 using Photon.Pun;
+using System;
 using UnityEngine;
 
 public class MonsterBehaviour : MonoBehaviourPun, IPunInstantiateMagicCallback, IPunObservable {
 
+    public Action Died;
     public MonsterData Data { get; private set; }
 
     [SerializeField]
@@ -74,6 +76,7 @@ public class MonsterBehaviour : MonoBehaviourPun, IPunInstantiateMagicCallback, 
     }
 
     public void OnDeath(IMonsterController _) {
+        Died?.Invoke();
         PhotonNetwork.Destroy(gameObject);
     }
 
