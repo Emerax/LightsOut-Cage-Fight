@@ -1,12 +1,14 @@
 using System;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using static Shop;
 
 public class Cage : MonoBehaviour {
-
     [SerializeField]
     private SpriteRenderer sprite;
+    [SerializeField]
+    private GameObject priceTag;
 
     public Action<CageEventType, Cage> CageEventAction;
     public int Cost { get => cost; private set => cost = value; }
@@ -16,7 +18,7 @@ public class Cage : MonoBehaviour {
     private ArenaData arenaData;
     private MonsterVariantID monsterID;
     private bool bought = false;
-    private int cost = 60;
+    private int cost;
 
     private void OnMouseDown() {
         if(bought) {
@@ -41,12 +43,15 @@ public class Cage : MonoBehaviour {
         MonsterVariant[] monsterVariants = monsterSettings.monsterVariants;
         MonsterVariant monsterVariant = monsterVariants[UnityEngine.Random.Range(0, monsterVariants.Length)];
         monsterID = monsterVariant.identifier;
+        Cost = monsterVariant.cost;
+        priceTag.GetComponentInChildren<TMP_Text>().text = Cost.ToString();
 
         sprite.sprite = monsterVariant.sprite;
     }
 
     public void OnBought() {
         bought = true;
+        priceTag.SetActive(false);
         Monsters.AddRange(IMonsterController.Create(monsterSettings, monsterID, arenaData, new(transform.position.x, transform.position.z)));
     }
 

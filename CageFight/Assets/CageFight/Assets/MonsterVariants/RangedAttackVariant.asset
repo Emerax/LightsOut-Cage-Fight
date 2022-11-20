@@ -19,6 +19,7 @@ MonoBehaviour:
   height: 1
   health: 10
   movementSpeed: 1
+  cost: 80
   attackRange: 4
   attackCooldown: 2.5
   attackDamage: 5
