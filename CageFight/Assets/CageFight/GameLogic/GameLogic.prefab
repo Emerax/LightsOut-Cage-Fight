@@ -82,6 +82,15 @@ MonoBehaviour:
   - {r: 0.047822434, g: 0.5849056, b: 0.4888094, a: 1}
   - {r: 1, g: 0, b: 0.9437647, a: 1}
   - {r: 0.6173992, g: 0, b: 1, a: 1}
+  playerNames:
+  - Gaius
+  - Tiberius
+  - Markus
+  - Horatius
+  - Cassia
+  - Octavia
+  - Antonia
+  - Appia
   startingMoney: 50
   shopTime: 10
   combatTime: 15

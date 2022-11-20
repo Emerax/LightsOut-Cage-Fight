@@ -22,6 +22,8 @@ public class GameLogic : MonoBehaviourPunCallbacks, IPunObservable {
     [SerializeField]
     private List<Color> playerColors;
     [SerializeField]
+    private List<string> playerNames;
+    [SerializeField]
     private int startingMoney;
     [SerializeField]
     private float shopTime = 5f;
@@ -149,7 +151,9 @@ public class GameLogic : MonoBehaviourPunCallbacks, IPunObservable {
         if(PhotonNetwork.IsMasterClient) {
             //First time setup goes here! This player should decide when the game starts.
             PhotonNetwork.EnableCloseConnection = true;
-            PhotonNetwork.LocalPlayer.SetCustomProperties(new Hashtable() { { COLOR_KEY, ColorToVector3(playerColors[nextPlayerColorIndex++]) } });
+            PhotonNetwork.LocalPlayer.SetCustomProperties(new Hashtable() { { COLOR_KEY, ColorToVector3(playerColors[nextPlayerColorIndex]) } });
+            PhotonNetwork.LocalPlayer.NickName=playerNames[nextPlayerColorIndex];
+            nextPlayerColorIndex++;
             ui.SetHostPanelDisplay();
         }
         else {
@@ -181,8 +185,10 @@ public class GameLogic : MonoBehaviourPunCallbacks, IPunObservable {
         }
 
         if(PhotonNetwork.IsMasterClient) {
-            newPlayer.SetCustomProperties(new Hashtable() { { COLOR_KEY, ColorToVector3(playerColors[nextPlayerColorIndex++]) } });
-        }
+            newPlayer.SetCustomProperties(new Hashtable() { { COLOR_KEY, ColorToVector3(playerColors[nextPlayerColorIndex]) } });
+            newPlayer.NickName=playerNames[nextPlayerColorIndex];
+            nextPlayerColorIndex++;
+        }   
     }
 
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps) {

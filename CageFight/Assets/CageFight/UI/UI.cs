@@ -73,7 +73,7 @@ public class UI : MonoBehaviourPunCallbacks {
                 if((int)score > bestScore) {
                     bestScore = (int)score;
                     winnerColor = Vector3ToColor((Vector3)player.CustomProperties[COLOR_KEY]);
-                    winnerName = player.ToString(); //ordn #
+                    winnerName = player.NickName; //ordn #
                 }
             }
         }
