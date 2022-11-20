@@ -10,7 +10,7 @@ public class ArenaCenter : MonoBehaviour {
     private float coolDown = 0f;
     private GladiatorManager localPlayer;
     private bool active = false;
-    readonly List<MonsterBehaviour> enteredMonsters = new();
+    readonly HashSet<MonsterBehaviour> enteredMonsters = new();
 
     private void Awake() {
         coolDown = scoringDelay;
@@ -35,7 +35,9 @@ public class ArenaCenter : MonoBehaviour {
     }
 
     public void Deregister(MonsterBehaviour monsterBehaviour) {
-        enteredMonsters.Remove(monsterBehaviour);
+        if(enteredMonsters.Contains(monsterBehaviour)) {
+            enteredMonsters.Remove(monsterBehaviour);
+        }
         monsterBehaviour.Died -= OnMonsterDeath;
     }
 

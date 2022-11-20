@@ -146,7 +146,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1105706951899712141}
   - component: {fileID: 3523985502100239003}
-  - component: {fileID: 5737094780961910524}
   m_Layer: 0
   m_Name: soldier_awake (1)
   m_TagString: Untagged
@@ -221,19 +220,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!65 &5737094780961910524
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7170810439034637463}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 6.77, y: 7.51, z: 0.2}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &2918947477318951081
 PrefabInstance:
   m_ObjectHideFlags: 0

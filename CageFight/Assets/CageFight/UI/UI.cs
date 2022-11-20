@@ -115,6 +115,7 @@ public class UI : MonoBehaviourPunCallbacks {
                 timerText.enabled = false;
                 hostPanel.SetActive(false);
                 gameOverPanel.SetActive(true);
+                resetButton.gameObject.SetActive(PhotonNetwork.IsMasterClient);
                 SetWinnerDisplay();
                 break;
             case GameState.DEBUG_COMBAT_PHASE:
