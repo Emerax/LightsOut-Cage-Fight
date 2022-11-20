@@ -1,19 +1,24 @@
-using System.Collections;
-using System.Collections.Generic;
+using Photon.Pun;
+using Photon.Realtime;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class HealthBar_Script : MonoBehaviour
-{
-   private Image HealthBar;
-   public MonsterBehaviour Monster;
+public class HealthBar_Script : MonoBehaviour {
 
-   void Start(){
-      HealthBar=GetComponent<Image>();
-   }
-   void Update(){
-      //sDebug.Log(Monster.Data.health);
-      HealthBar.fillAmount= Monster.Data.health/Monster.Data.MaxHealth;
-   }
+    public MonsterBehaviour Monster;
+    private Image healthBar;
+
+    private void Start() {
+        healthBar = GetComponent<Image>();
+        Player player = PhotonNetwork.PlayerList.First(p => p.ActorNumber == Monster.Data.Team);
+        if(player.CustomProperties.TryGetValue(GameLogic.COLOR_KEY, out object color)) {
+            healthBar.color = GameLogic.Vector3ToColor((Vector3)color);
+        }
+    }
+    private void Update() {
+        healthBar.fillAmount = Monster.Data.health/Monster.Data.MaxHealth;
+
+    }
 }
  
