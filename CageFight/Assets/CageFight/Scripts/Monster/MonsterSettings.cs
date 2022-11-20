@@ -12,19 +12,25 @@ public enum MonsterVariantID {
     Unspecified = -1,
     Melee = 0,
     Ranged = 1,
+    Swarm = 2,
 }
 
 public abstract class MonsterVariant : ScriptableObject {
     public MonsterVariantID identifier;
+    public int count = 1;
     public float width = 1f;
     public float height = 1f;
     public float health = 10f;
     public float movementSpeed = 1f;
 
-    public abstract IMonsterController CreateController(MonsterSettings monsterSettings, ArenaData arenaData, Vector2 position);
+    public abstract IMonsterController[] CreateControllers(MonsterSettings monsterSettings, ArenaData arenaData, Vector2 position);
 
-    protected MonsterData CreateMonsterData(MonsterSettings monsterSettings, Vector2 position) {
+    protected MonsterData[] CreateMonsterData(MonsterSettings monsterSettings, Vector2 position) {
         int team = PhotonNetwork.LocalPlayer.ActorNumber;
-        return new(monsterSettings, team, identifier, health, position, isSynced: true);
+        MonsterData[] monstersData = new MonsterData[count];
+        for(int i = 0; i < count; ++i) {
+            monstersData[i] = new(monsterSettings, team, identifier, health, position, isSynced: true);
+        }
+        return monstersData;
     }
 }
