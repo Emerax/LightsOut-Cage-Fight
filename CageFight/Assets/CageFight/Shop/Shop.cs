@@ -99,6 +99,9 @@ public class Shop : MonoBehaviour {
                         cage.OnBought();
                         boughtCages.Add(cage);
                     }
+                    else {
+                        Debug.Log($"Failed to find vacant slot!");
+                    }
                 }
                 break;
             case CageEventType.SOLD:
@@ -132,7 +135,13 @@ public class Shop : MonoBehaviour {
 
     private bool TryFindVacantSlot(out CageSlot cageSlot) {
         foreach(CageSlot slot in slots) {
-            if(!cageSlots.TryGetValue(slot, out Cage _)) {
+            if(cageSlots.TryGetValue(slot, out Cage cage) && cage == null) {
+                if(cage == null) {
+                    cageSlot = slot;
+                    return true;
+                }
+            }
+            else {
                 cageSlot = slot;
                 return true;
             }
@@ -163,7 +172,7 @@ public class Shop : MonoBehaviour {
             for(int i = 0; i < monsterCount; ++i) {
                 IMonsterController monster = cage.Monsters[i];
                 Vector2 centerPos = new(cage.transform.position.x, cage.transform.position.z);
-                if (monsterCount == 1) {
+                if(monsterCount == 1) {
                     monster.Data.position = centerPos;
                 }
                 else {
@@ -185,6 +194,15 @@ public class Shop : MonoBehaviour {
         foreach(MonsterBehaviour monster in MonsterList.Instance.GetMonstersOfTeam(localPlayer.Team)) {
             PhotonNetwork.Destroy(monster.gameObject);
         }
+    }
+
+    public void DestroyCages() {
+        foreach(Cage cage in boughtCages) {
+            ClearCageFromSlot(cage);
+            Destroy(cage.gameObject);
+        }
+
+        boughtCages.Clear();
     }
 
     public void DebugSpawnMonsters(MonsterManager monsterManager, int team) {

@@ -13,7 +13,7 @@ public class GladiatorManager {
 
     public int Money {
         get => money;
-             set {
+        set {
             money = value;
             MoneyChangeAction?.Invoke(money);
         }
@@ -41,5 +41,9 @@ public class GladiatorManager {
 
     public void ToggleReady(bool ready) {
         player.SetCustomProperties(new ExitGames.Client.Photon.Hashtable() { { GameLogic.READY_KEY, ready } });
+    }
+
+    public void ResetScore() {
+        player.SetCustomProperties(new ExitGames.Client.Photon.Hashtable() { { GameLogic.SCORE_KEY, 0 } });
     }
 }

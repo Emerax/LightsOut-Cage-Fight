@@ -18,8 +18,10 @@ MonoBehaviour:
   width: 1
   height: 1
   health: 10
+  enemyDetectionRange: 5
+  aboidanceDistance: 1
   movementSpeed: 1
-  cost: 80
+  cost: 65
   attackRange: 4
   attackCooldown: 2.5
   attackDamage: 5

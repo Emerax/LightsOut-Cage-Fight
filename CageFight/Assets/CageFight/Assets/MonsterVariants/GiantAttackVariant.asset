@@ -21,6 +21,7 @@ MonoBehaviour:
   enemyDetectionRange: 8
   aboidanceDistance: 0
   movementSpeed: 0.7
+  cost: 150
   attackRange: 2
   attackCooldown: 3
   attackDamage: 10

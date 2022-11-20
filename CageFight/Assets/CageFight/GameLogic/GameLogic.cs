@@ -152,7 +152,7 @@ public class GameLogic : MonoBehaviourPunCallbacks, IPunObservable {
             //First time setup goes here! This player should decide when the game starts.
             PhotonNetwork.EnableCloseConnection = true;
             PhotonNetwork.LocalPlayer.SetCustomProperties(new Hashtable() { { COLOR_KEY, ColorToVector3(playerColors[nextPlayerColorIndex]) } });
-            PhotonNetwork.LocalPlayer.NickName=playerNames[nextPlayerColorIndex];
+            PhotonNetwork.LocalPlayer.NickName = playerNames[nextPlayerColorIndex];
             nextPlayerColorIndex++;
             ui.SetHostPanelDisplay();
         }
@@ -186,9 +186,9 @@ public class GameLogic : MonoBehaviourPunCallbacks, IPunObservable {
 
         if(PhotonNetwork.IsMasterClient) {
             newPlayer.SetCustomProperties(new Hashtable() { { COLOR_KEY, ColorToVector3(playerColors[nextPlayerColorIndex]) } });
-            newPlayer.NickName=playerNames[nextPlayerColorIndex];
+            newPlayer.NickName = playerNames[nextPlayerColorIndex];
             nextPlayerColorIndex++;
-        }   
+        }
     }
 
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps) {
@@ -324,7 +324,7 @@ public class GameLogic : MonoBehaviourPunCallbacks, IPunObservable {
                 LocalPlayer.ToggleReady(false);
                 break;
             case GameState.SHOP_PHASE:
-                LocalPlayer.Money+=allowance;
+                LocalPlayer.Money += allowance;
                 remainingTime = shopTime;
                 currentRound++;
                 if(PhotonNetwork.IsMasterClient) {
@@ -360,7 +360,10 @@ public class GameLogic : MonoBehaviourPunCallbacks, IPunObservable {
 
     [PunRPC]
     private void ResetGameRPC() {
-        //TODO: Properly reset everything here.
+        LocalPlayer.ResetScore();
+        LocalPlayer.Money = startingMoney;
+        arena.shop.DespawnMonsters();
+        arena.shop.DestroyCages();
         currentRound = 0;
         ChangeState(GameState.SHOP_PHASE);
     }
