@@ -506,6 +506,7 @@ MonoBehaviour:
   scoreText: {fileID: 5674101969632303453}
   readyText: {fileID: 585065554264215716}
   timerText: {fileID: 1991680701466149929}
+  hostPanel: {fileID: 5272323374094194288}
 --- !u!1 &5272323374094194288
 GameObject:
   m_ObjectHideFlags: 0
