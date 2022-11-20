@@ -17,6 +17,7 @@ public enum MonsterVariantID {
 
 public abstract class MonsterVariant : ScriptableObject {
     public MonsterVariantID identifier;
+    public Sprite sprite;
     public int count = 1;
     public float width = 1f;
     public float height = 1f;
