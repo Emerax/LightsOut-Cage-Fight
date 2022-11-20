@@ -6,7 +6,7 @@ using static Shop;
 public class Cage : MonoBehaviour {
     public Action<CageEventType, Cage> CageEventAction;
     public int Cost { get => cost; private set => cost = value; }
-    public IMonsterController Monster { get; private set; }
+    public List<IMonsterController> Monsters { get; private set; } = new();
 
     private MonsterSettings monsterSettings;
     private ArenaData arenaData;
@@ -35,7 +35,7 @@ public class Cage : MonoBehaviour {
 
     public void OnBought() {
         bought = true;
-        Monster = IMonsterController.Create(monsterSettings, MonsterVariantID.Melee, arenaData, new(transform.position.x, transform.position.z));
+        Monsters.Add(IMonsterController.Create(monsterSettings, MonsterVariantID.Melee, arenaData, new(transform.position.x, transform.position.z)));
     }
 
     private void OnDestroy() {
