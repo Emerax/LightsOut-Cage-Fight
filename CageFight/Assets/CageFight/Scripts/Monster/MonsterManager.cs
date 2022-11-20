@@ -23,6 +23,10 @@ public class MonsterManager {
         monsterControllers.Remove(monsterController);
     }
 
+    public void ClearMonsters() {
+        monsterControllers.Clear();
+    }
+
     public void Tick(float deltaTime) {
         foreach(IMonsterController controller in monsterControllers) {
             controller.Tick(deltaTime);

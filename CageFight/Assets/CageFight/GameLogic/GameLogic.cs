@@ -362,6 +362,7 @@ public class GameLogic : MonoBehaviourPunCallbacks, IPunObservable {
     private void ResetGameRPC() {
         LocalPlayer.ResetScore();
         LocalPlayer.Money = startingMoney;
+        monsterManager.ClearMonsters();
         arena.shop.DespawnMonsters();
         arena.shop.DestroyCages();
         currentRound = 0;
