@@ -62,7 +62,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: d9b3fb176127d8c4bbcca63aadd0343c, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -324,7 +324,7 @@ Transform:
   - {fileID: 5263011832508483273}
   - {fileID: 8333077242896568680}
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7455696754161629791
 MonoBehaviour:
@@ -359,6 +359,8 @@ MonoBehaviour:
   doneButton: {fileID: 7530640888661010986}
   cameraHolder: {fileID: 8333077242896568680}
   monsterSettings: {fileID: 11400000, guid: 0744444c0727e1f4f8da65ddc79c78f6, type: 2}
+  shopParent: {fileID: 0}
+  slotsParent: {fileID: 0}
 --- !u!1 &3193853831993984714
 GameObject:
   m_ObjectHideFlags: 0
@@ -421,7 +423,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: d9b3fb176127d8c4bbcca63aadd0343c, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -581,7 +583,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: d9b3fb176127d8c4bbcca63aadd0343c, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1000,6 +1002,10 @@ PrefabInstance:
     serializedVersion: 2
     m_TransformParent: {fileID: 5263011832508483273}
     m_Modifications:
+    - target: {fileID: 2552412244874465172, guid: b00b7c2838a9f9b48bea360e59390bc7, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 3e5a6c8dfde4b8b4fafc28736e767a5c, type: 2}
     - target: {fileID: 5281205155931139374, guid: b00b7c2838a9f9b48bea360e59390bc7, type: 3}
       propertyPath: m_Name
       value: CageSlot (8)
@@ -1075,6 +1081,10 @@ PrefabInstance:
     serializedVersion: 2
     m_TransformParent: {fileID: 5263011832508483273}
     m_Modifications:
+    - target: {fileID: 2552412244874465172, guid: b00b7c2838a9f9b48bea360e59390bc7, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 3e5a6c8dfde4b8b4fafc28736e767a5c, type: 2}
     - target: {fileID: 5281205155931139374, guid: b00b7c2838a9f9b48bea360e59390bc7, type: 3}
       propertyPath: m_Name
       value: CageSlot
@@ -1150,6 +1160,10 @@ PrefabInstance:
     serializedVersion: 2
     m_TransformParent: {fileID: 5263011832508483273}
     m_Modifications:
+    - target: {fileID: 2552412244874465172, guid: b00b7c2838a9f9b48bea360e59390bc7, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 3e5a6c8dfde4b8b4fafc28736e767a5c, type: 2}
     - target: {fileID: 5281205155931139374, guid: b00b7c2838a9f9b48bea360e59390bc7, type: 3}
       propertyPath: m_Name
       value: CageSlot (10)
@@ -1225,6 +1239,10 @@ PrefabInstance:
     serializedVersion: 2
     m_TransformParent: {fileID: 5263011832508483273}
     m_Modifications:
+    - target: {fileID: 2552412244874465172, guid: b00b7c2838a9f9b48bea360e59390bc7, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 3e5a6c8dfde4b8b4fafc28736e767a5c, type: 2}
     - target: {fileID: 5281205155931139374, guid: b00b7c2838a9f9b48bea360e59390bc7, type: 3}
       propertyPath: m_Name
       value: CageSlot (6)
@@ -1300,6 +1318,10 @@ PrefabInstance:
     serializedVersion: 2
     m_TransformParent: {fileID: 5263011832508483273}
     m_Modifications:
+    - target: {fileID: 2552412244874465172, guid: b00b7c2838a9f9b48bea360e59390bc7, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 3e5a6c8dfde4b8b4fafc28736e767a5c, type: 2}
     - target: {fileID: 5281205155931139374, guid: b00b7c2838a9f9b48bea360e59390bc7, type: 3}
       propertyPath: m_Name
       value: CageSlot (1)
@@ -1375,6 +1397,10 @@ PrefabInstance:
     serializedVersion: 2
     m_TransformParent: {fileID: 5263011832508483273}
     m_Modifications:
+    - target: {fileID: 2552412244874465172, guid: b00b7c2838a9f9b48bea360e59390bc7, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 3e5a6c8dfde4b8b4fafc28736e767a5c, type: 2}
     - target: {fileID: 5281205155931139374, guid: b00b7c2838a9f9b48bea360e59390bc7, type: 3}
       propertyPath: m_Name
       value: CageSlot (11)
@@ -1450,6 +1476,10 @@ PrefabInstance:
     serializedVersion: 2
     m_TransformParent: {fileID: 5263011832508483273}
     m_Modifications:
+    - target: {fileID: 2552412244874465172, guid: b00b7c2838a9f9b48bea360e59390bc7, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 3e5a6c8dfde4b8b4fafc28736e767a5c, type: 2}
     - target: {fileID: 5281205155931139374, guid: b00b7c2838a9f9b48bea360e59390bc7, type: 3}
       propertyPath: m_Name
       value: CageSlot (2)
@@ -1525,6 +1555,10 @@ PrefabInstance:
     serializedVersion: 2
     m_TransformParent: {fileID: 5263011832508483273}
     m_Modifications:
+    - target: {fileID: 2552412244874465172, guid: b00b7c2838a9f9b48bea360e59390bc7, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 3e5a6c8dfde4b8b4fafc28736e767a5c, type: 2}
     - target: {fileID: 5281205155931139374, guid: b00b7c2838a9f9b48bea360e59390bc7, type: 3}
       propertyPath: m_Name
       value: CageSlot (4)
@@ -1600,6 +1634,10 @@ PrefabInstance:
     serializedVersion: 2
     m_TransformParent: {fileID: 5263011832508483273}
     m_Modifications:
+    - target: {fileID: 2552412244874465172, guid: b00b7c2838a9f9b48bea360e59390bc7, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 3e5a6c8dfde4b8b4fafc28736e767a5c, type: 2}
     - target: {fileID: 5281205155931139374, guid: b00b7c2838a9f9b48bea360e59390bc7, type: 3}
       propertyPath: m_Name
       value: CageSlot (7)
@@ -1675,6 +1713,10 @@ PrefabInstance:
     serializedVersion: 2
     m_TransformParent: {fileID: 5263011832508483273}
     m_Modifications:
+    - target: {fileID: 2552412244874465172, guid: b00b7c2838a9f9b48bea360e59390bc7, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 3e5a6c8dfde4b8b4fafc28736e767a5c, type: 2}
     - target: {fileID: 5281205155931139374, guid: b00b7c2838a9f9b48bea360e59390bc7, type: 3}
       propertyPath: m_Name
       value: CageSlot (3)
@@ -1750,6 +1792,10 @@ PrefabInstance:
     serializedVersion: 2
     m_TransformParent: {fileID: 5263011832508483273}
     m_Modifications:
+    - target: {fileID: 2552412244874465172, guid: b00b7c2838a9f9b48bea360e59390bc7, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 3e5a6c8dfde4b8b4fafc28736e767a5c, type: 2}
     - target: {fileID: 5281205155931139374, guid: b00b7c2838a9f9b48bea360e59390bc7, type: 3}
       propertyPath: m_Name
       value: CageSlot (5)
@@ -1825,6 +1871,10 @@ PrefabInstance:
     serializedVersion: 2
     m_TransformParent: {fileID: 5263011832508483273}
     m_Modifications:
+    - target: {fileID: 2552412244874465172, guid: b00b7c2838a9f9b48bea360e59390bc7, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 3e5a6c8dfde4b8b4fafc28736e767a5c, type: 2}
     - target: {fileID: 5281205155931139374, guid: b00b7c2838a9f9b48bea360e59390bc7, type: 3}
       propertyPath: m_Name
       value: CageSlot (9)
