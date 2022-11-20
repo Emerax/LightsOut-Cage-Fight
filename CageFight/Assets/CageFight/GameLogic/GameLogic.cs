@@ -312,6 +312,7 @@ public class GameLogic : MonoBehaviourPunCallbacks, IPunObservable {
                 remainingTime = combatTime;
                 arena.shop.SpawnMonsters(monsterManager);
                 arena.center.SetActive(true);
+                LocalPlayer.ToggleReady(false);
                 break;
             case GameState.SHOP_PHASE:
                 remainingTime = shopTime;
