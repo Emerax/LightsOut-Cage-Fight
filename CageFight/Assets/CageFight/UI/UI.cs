@@ -15,6 +15,8 @@ public class UI : MonoBehaviourPunCallbacks {
     private TMP_Text readyText;
     [SerializeField]
     private TMP_Text timerText;
+    [SerializeField]
+    private GameObject hostPanel;
 
     private void Awake() {
         OnEnterState(GameState.PRE_PHASE);
@@ -55,17 +57,20 @@ public class UI : MonoBehaviourPunCallbacks {
                 scoreText.enabled = false;
                 readyText.enabled = true;
                 timerText.enabled = false;
+                hostPanel.SetActive(PhotonNetwork.IsMasterClient);
                 break;
             case GameState.COMBAT_PHASE:
                 moneyText.enabled = true;
                 scoreText.enabled = true;
                 readyText.enabled = false;
                 timerText.enabled = true;
+                hostPanel.SetActive(false);
                 break;
             case GameState.SHOP_PHASE:
                 moneyText.enabled = true;
                 scoreText.enabled = true;
                 readyText.enabled = true;
+                hostPanel.SetActive(false);
                 timerText.enabled = true;
                 break;
             case GameState.END_PHASE:
@@ -73,6 +78,7 @@ public class UI : MonoBehaviourPunCallbacks {
                 scoreText.enabled = false;
                 readyText.enabled = false;
                 timerText.enabled = false;
+                hostPanel.SetActive(false);
                 break;
             case GameState.DEBUG_COMBAT_PHASE:
                 break;
