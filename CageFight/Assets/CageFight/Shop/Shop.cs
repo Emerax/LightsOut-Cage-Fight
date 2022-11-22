@@ -45,10 +45,6 @@ public class Shop : MonoBehaviour {
     }
 
     private void Awake() {
-        for(int i = 0; i < spawnPoints.Count; i++) {
-            SpawnCage(spawnPoints[i]);
-        }
-
         foreach(CageSlot slot in slots) {
             slot.MouseOverAction += OnSlotMouseOver;
         }
@@ -57,11 +53,11 @@ public class Shop : MonoBehaviour {
         SetVisible(false);
     }
 
-    public void SpawnCage(Transform spawnPointTransform) {
+    public void SpawnCage(Transform spawnPointTransform, int maxMonsterCost) {
         Cage cage = Instantiate(cagePrefab, spawnPointTransform);
         cage.transform.localPosition = Vector3.zero;
         cage.transform.localRotation = Quaternion.identity;
-        cage.Init(monsterSettings, arenaData);
+        cage.Init(monsterSettings, arenaData, maxMonsterCost);
         cage.CageEventAction += OnCageEvent;
     }
 
@@ -81,6 +77,9 @@ public class Shop : MonoBehaviour {
 
     public void SetLocalPlayer(GladiatorManager gladiatorManager) {
         localPlayer = gladiatorManager;
+        for(int i = 0; i < spawnPoints.Count; i++) {
+            SpawnCage(spawnPoints[i], localPlayer.Money);
+        }
     }
 
     public void ToggleVisibility(bool visible) {
@@ -94,7 +93,7 @@ public class Shop : MonoBehaviour {
                 if(localPlayer.Money >= cage.Cost) {
                     if(TryFindVacantSlot(out CageSlot slot)) {
                         localPlayer.RemoveMoney(cage.Cost);
-                        SpawnCage(cage.transform.parent); // New (replacement) cage
+                        SpawnCage(cage.transform.parent, localPlayer.Money); // New (replacement) cage
                         AttachCageToSlot(cage, slot);
                         cage.OnBought();
                         boughtCages.Add(cage);
