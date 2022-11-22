@@ -118,8 +118,6 @@ public class UI : MonoBehaviourPunCallbacks {
                 resetButton.gameObject.SetActive(PhotonNetwork.IsMasterClient);
                 SetWinnerDisplay();
                 break;
-            case GameState.DEBUG_COMBAT_PHASE:
-                break;
             default:
                 break;
         }

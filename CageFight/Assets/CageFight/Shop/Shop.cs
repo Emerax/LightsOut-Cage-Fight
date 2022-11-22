@@ -205,14 +205,6 @@ public class Shop : MonoBehaviour {
         boughtCages.Clear();
     }
 
-    public void DebugSpawnMonsters(MonsterManager monsterManager, int team) {
-        float angle = team * 0.25f * Mathf.PI;
-        Vector2 axis = new(Mathf.Cos(angle), Mathf.Sin(angle));
-
-        monsterManager.SpawnMonster(IMonsterController.Create(monsterSettings, MonsterVariantID.Melee, arenaData, 10f * axis)[0]);
-        monsterManager.SpawnMonster(IMonsterController.Create(monsterSettings, MonsterVariantID.Ranged, arenaData, -10f * axis)[0]);
-    }
-
     private void DestroyCage(Cage cage) {
         ClearCageFromSlot(cage);
         boughtCages.Remove(cage);

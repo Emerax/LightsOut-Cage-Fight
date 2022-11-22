@@ -54,7 +54,6 @@ public class GameLogic : MonoBehaviourPunCallbacks, IPunObservable {
         COMBAT_PHASE = 1,
         SHOP_PHASE = 2,
         END_PHASE = 3,
-        DEBUG_COMBAT_PHASE = 99,
     }
 
     private GameState state = GameState.PRE_PHASE;
@@ -87,7 +86,6 @@ public class GameLogic : MonoBehaviourPunCallbacks, IPunObservable {
         switch(state) {
             case GameState.PRE_PHASE:
                 break;
-            case GameState.DEBUG_COMBAT_PHASE:
             case GameState.COMBAT_PHASE:
                 monsterManager.Tick(Time.deltaTime);
                 CheckTimer(GameState.SHOP_PHASE);
@@ -111,15 +109,6 @@ public class GameLogic : MonoBehaviourPunCallbacks, IPunObservable {
     }
 
     private void UpdateInput() {
-        if(Input.GetKeyDown(KeyCode.P)) {
-            if(state == GameState.DEBUG_COMBAT_PHASE) {
-                photonView.RPC(nameof(DebugSpawnMonstersRPC), RpcTarget.All);
-            }
-            else {
-                ChangeState(GameState.DEBUG_COMBAT_PHASE);
-            }
-        }
-
         switch(state) {
             case GameState.PRE_PHASE:
                 if(Input.GetKeyDown(KeyCode.Return)) {
@@ -335,9 +324,6 @@ public class GameLogic : MonoBehaviourPunCallbacks, IPunObservable {
                 break;
             case GameState.END_PHASE:
                 break;
-            case GameState.DEBUG_COMBAT_PHASE:
-                DebugSpawnMonsters();
-                break;
             default:
                 break;
         }
@@ -347,15 +333,6 @@ public class GameLogic : MonoBehaviourPunCallbacks, IPunObservable {
         if(state == GameState.SHOP_PHASE) {
             cameraController.SetShopTarget(arena.shop);
         }
-    }
-
-    private void DebugSpawnMonsters() {
-        arena.shop.DebugSpawnMonsters(monsterManager, LocalPlayer.Team);
-    }
-
-    [PunRPC]
-    private void DebugSpawnMonstersRPC() {
-        DebugSpawnMonsters();
     }
 
     [PunRPC]
