@@ -190,7 +190,8 @@ public class Shop : MonoBehaviour {
         }
     }
 
-    public void DespawnMonsters() {
+    public void DespawnMonsters(MonsterManager monsterManager) {
+        monsterManager.ClearMonsters();
         foreach(MonsterBehaviour monster in MonsterList.Instance.GetMonstersOfTeam(localPlayer.Team)) {
             PhotonNetwork.Destroy(monster.gameObject);
         }

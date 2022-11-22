@@ -281,7 +281,7 @@ public class GameLogic : MonoBehaviourPunCallbacks, IPunObservable {
                 LocalPlayer.ToggleReady(false);
                 break;
             case GameState.COMBAT_PHASE:
-                arena.shop.DespawnMonsters();
+                arena.shop.DespawnMonsters(monsterManager);
                 arena.center.SetActive(false);
                 //Cleanup ALL THE MONSTERS!
                 if(PhotonNetwork.IsMasterClient) {
@@ -339,8 +339,7 @@ public class GameLogic : MonoBehaviourPunCallbacks, IPunObservable {
     private void ResetGameRPC() {
         LocalPlayer.ResetScore();
         LocalPlayer.Money = startingMoney;
-        monsterManager.ClearMonsters();
-        arena.shop.DespawnMonsters();
+        arena.shop.DespawnMonsters(monsterManager);
         arena.shop.DestroyCages();
         currentRound = 0;
         ChangeState(GameState.SHOP_PHASE);
