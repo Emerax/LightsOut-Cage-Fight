@@ -92,7 +92,7 @@ MonoBehaviour:
   - Antonia
   - Appia
   startingMoney: 50
-  shopTime: 10
+  shopTime: 17
   combatTime: 20
   roundsPerGame: 3
   monsterSettings: {fileID: 11400000, guid: 0744444c0727e1f4f8da65ddc79c78f6, type: 2}

@@ -495,10 +495,6 @@ PrefabInstance:
     serializedVersion: 2
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 2905736544290226142, guid: e9006f5a957f9564da2862561b948475, type: 3}
-      propertyPath: allowance
-      value: 50
-      objectReference: {fileID: 0}
     - target: {fileID: 5677848930866840129, guid: e9006f5a957f9564da2862561b948475, type: 3}
       propertyPath: sceneViewId
       value: 1
