@@ -137,7 +137,7 @@ public class Shop : MonoBehaviour {
 
     private bool TryFindVacantSlot(out CageSlot cageSlot) {
         foreach(CageSlot slot in slots) {
-            if(cageSlots.TryGetValue(slot, out Cage cage) && cage == null) {
+            if(cageSlots.TryGetValue(slot, out Cage cage)) {
                 if(cage == null) {
                     cageSlot = slot;
                     return true;
