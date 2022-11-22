@@ -13,18 +13,30 @@ public class CameraController : MonoBehaviour {
     private float maxSpeed;
 
     [SerializeField]
+    private float defaultZoom;
+    [SerializeField]
+    private float maxZoom;
+    [SerializeField]
+    private float minZoom;
+    [SerializeField]
+    private float maxZoomDelta;
+
+    [SerializeField]
     private float shopLerpTime = 2f;
 
     private Camera cameraObject;
 
     private float speed = 0f;
+    private float zoomSpeed = 0f;
+    private float zoom = 0f;
     private bool viewShop = false;
     private ArenaSegment shopSegment;
-    private Vector3 preShopPosition;
-    private Quaternion preShopRotation;
+    private Vector3 postShopPosition;
+    private Quaternion postShopRotation;
 
     private void Awake() {
         cameraObject = GetComponentInChildren<Camera>();
+        zoom = defaultZoom;
     }
 
     // Update is called once per frame
@@ -57,26 +69,34 @@ public class CameraController : MonoBehaviour {
                 speed = 0f;
             }
         }
+
+        zoomSpeed = Input.mouseScrollDelta.y;
+        zoomSpeed = Mathf.Clamp(zoomSpeed, -maxZoomDelta, maxZoomDelta);
     }
 
     private void UpdateTransform() {
         if(viewShop) {
             return;
         }
-        transform.position = Quaternion.Euler(new Vector3(0f, speed * Time.deltaTime, 0f)) * (transform.position - arenaTransform.position) + arenaTransform.position;
+        zoom -= zoomSpeed;
+        zoom = Mathf.Clamp(zoom, minZoom, maxZoom);
+        Vector3 zoomedOffset = zoom * (transform.position - arenaTransform.position).normalized;
+
+        transform.position = Quaternion.Euler(new Vector3(0f, speed * Time.deltaTime, 0f)) * zoomedOffset + arenaTransform.position;
         cameraObject.transform.LookAt(arenaTransform);
     }
 
     public void SetShopTarget(Shop shop) {
         viewShop = true;
         Transform target = shop.CameraHolderTransform;
-        preShopPosition = transform.position;
-        preShopRotation = cameraObject.transform.rotation;
+        zoom = defaultZoom;
+        postShopPosition = zoom * (transform.position - arenaTransform.position).normalized;
+        postShopRotation = cameraObject.transform.rotation;
         StartCoroutine(DoLerpToTarget(transform.position, target.position, cameraObject.transform.rotation, target.rotation, shopLerpTime));
     }
 
     public void SetArenaTarget() {
-        StartCoroutine(DoLerpAndThenSetViewShop(transform.position, preShopPosition, cameraObject.transform.rotation, preShopRotation, shopLerpTime));
+        StartCoroutine(DoLerpAndThenSetViewShop(transform.position, postShopPosition, cameraObject.transform.rotation, postShopRotation, shopLerpTime));
     }
 
     private IEnumerator DoLerpAndThenSetViewShop(Vector3 originPos, Vector3 targetPos, Quaternion originRot, Quaternion targetRot, float lerpTime) {

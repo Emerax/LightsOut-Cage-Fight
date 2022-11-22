@@ -133,4 +133,8 @@ MonoBehaviour:
   acceleration: 80
   speedDecay: 0.98
   maxSpeed: 350
+  defaultZoom: 30
+  maxZoom: 30
+  minZoom: 5
+  maxZoomDelta: 2
   shopLerpTime: 2
