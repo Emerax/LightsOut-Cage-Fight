@@ -67,6 +67,12 @@ public class Shop : MonoBehaviour {
 
     public void OnNewShopPhase() {
         doneButton.ResetButton();
+        foreach(Transform spawnPoint in spawnPoints) {
+            foreach(Cage shopCage in spawnPoint.GetComponentsInChildren<Cage>()) {
+                Destroy(shopCage.gameObject);
+            }
+            SpawnCage(spawnPoint, localPlayer.Money);
+        }
     }
 
     private void Update() {
@@ -77,9 +83,6 @@ public class Shop : MonoBehaviour {
 
     public void SetLocalPlayer(GladiatorManager gladiatorManager) {
         localPlayer = gladiatorManager;
-        for(int i = 0; i < spawnPoints.Count; i++) {
-            SpawnCage(spawnPoints[i], localPlayer.Money);
-        }
     }
 
     public void ToggleVisibility(bool visible) {
@@ -151,6 +154,7 @@ public class Shop : MonoBehaviour {
     }
 
     private void AttachCageToSlot(Cage cage, CageSlot slot) {
+        cage.transform.SetParent(slot.transform);
         cage.transform.position = slot.AttachPoint.position;
         cageSlots[slot] = cage;
     }
